@@ -1,0 +1,63 @@
+[gd_scene load_steps=8 format=3 uid="uid://bpq0y0jqwra4w"]
+
+[ext_resource type="FontFile" uid="uid://4ujtvc6xa177" path="res://font/Little_Malio_8-Bit.otf" id="1_bam6v"]
+[ext_resource type="Script" path="res://scripts/File Panel.gd" id="1_iuuf5"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ekmkv"]
+bg_color = Color(0.152941, 0.152941, 0.152941, 1)
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_3tp61"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_eefs7"]
+bg_color = Color(0.152941, 0.152941, 0.152941, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_warff"]
+bg_color = Color(0.176471, 0.176471, 0.176471, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_cysy3"]
+bg_color = Color(0.152941, 0.152941, 0.152941, 1)
+
+[node name="PanelContainer2" type="PanelContainer"]
+theme_override_styles/panel = SubResource("StyleBoxFlat_ekmkv")
+script = ExtResource("1_iuuf5")
+metadata/FilePath = ""
+metadata/Changed = false
+metadata/File = ""
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 2
+theme_override_constants/separation = 15
+
+[node name="Spacer2" type="Control" parent="HBoxContainer"]
+custom_minimum_size = Vector2(10, 0)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="HBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.372549, 0.701961, 0.960784, 1)
+theme_override_fonts/font = ExtResource("1_bam6v")
+theme_override_font_sizes/font_size = 14
+text = "SaveFile"
+
+[node name="Button" type="Button" parent="HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 8
+theme_override_colors/font_color = Color(0.372549, 0.701961, 0.960784, 1)
+theme_override_fonts/font = ExtResource("1_bam6v")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_3tp61")
+theme_override_styles/hover = SubResource("StyleBoxFlat_eefs7")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_warff")
+theme_override_styles/normal = SubResource("StyleBoxFlat_cysy3")
+text = "X"
+flat = true
+
+[node name="Spacer" type="Control" parent="HBoxContainer"]
+custom_minimum_size = Vector2(10, 0)
+layout_mode = 2
+
+[connection signal="gui_input" from="." to="." method="_on_gui_input"]
+[connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="." to="." method="_on_mouse_exited"]
+[connection signal="button_up" from="HBoxContainer/Button" to="." method="_close_button"]

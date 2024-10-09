@@ -1,0 +1,17 @@
+define shitnumber 0b01000101 //test
+>0 //test
+.start //test
+add r0 r0 r0
+add r1 r2 r3
+ldi r4 0b11110000
+prd eq 0 //test 2
+jmp .label
+#test one
+// test 2
+; test 3
+//
+.label
+adi r7 shitnumber
+sub r7 r2 r0
+prd c 0
+jmp .start
