@@ -1,7 +1,8 @@
 define shitnumber 0b01000101 //test
+define bullshit r2 //test 3
 >0 //test
 .start //test
-add r0 r0 r0
+add r0 r0 bullshit
 add r1 r2 r3
 ldi r4 0b11110000
 prd eq 0 //test 2

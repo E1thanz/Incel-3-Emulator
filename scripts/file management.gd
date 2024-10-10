@@ -4,6 +4,7 @@ const programButtonScene = preload("res://Scenes/File Button.tscn")
 
 var activeButton = null
 var fileButtons = []
+const maximum_files = 5
 
 func _ready():
 	DisplayServer.window_set_min_size(Vector2i(1920, 1080))
@@ -45,6 +46,9 @@ func _ready():
 	activeButton.set_meta("Changed", false)
 		
 func create_new_file(name):
+	if fileButtons.size() == maximum_files:
+		return
+	
 	if activeButton != null:
 		activeButton.selected = false
 		activeButton.update_selection()
@@ -71,6 +75,9 @@ func _notification(notification):
 		close()
 
 func _open_file_press():
+	if fileButtons.size() == maximum_files:
+		return
+	
 	var results = []
 	OS.execute("powershell.exe", PackedStringArray(["\"Add-Type -AssemblyName System.Windows.Forms; 
 														$FileBrowser = New-Object System.Windows.Forms.OpenFileDialog; 

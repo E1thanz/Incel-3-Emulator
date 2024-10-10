@@ -143,7 +143,6 @@ func _get_line_syntax_highlighting(line: int) -> Dictionary:
 	if prog_line.begins_with("."):
 		if prog_line.substr(1).contains(" "):
 			return color_map
-		text_editor.labels.append(prog_line)
 		color_map[0] = { "color": Color.hex(0xE8E892FF)}
 		if comment_index != -1:
 			color_map[comment_index] = { "color": Color.hex(0x858585FF) }
@@ -168,20 +167,28 @@ func _get_line_syntax_highlighting(line: int) -> Dictionary:
 			for character in split_dict[2][0].substr(2):
 				if character not in ["0", "1"]:
 					return color_map
-			text_editor.definitions.append(split_dict[1][0]) # = split_dict[2][0].bin_to_int()
+			color_map[split_dict[2][1]] = { "color": Color.hex(0x4EC9B0FF) }
+			#text_editor.definitions.append(split_dict[1][0]) # = split_dict[2][0].bin_to_int()
 		elif split_dict[2][0].begins_with("0x"):
 			if split_dict[2][0].length() == 2:
 				return color_map
 			if not split_dict[2][0].is_valid_hex_number(true):
 				return color_map
-			text_editor.definitions.append(split_dict[1][0]) # = split_dict[2][0].hex_to_int()
+			color_map[split_dict[2][1]] = { "color": Color.hex(0x4EC9B0FF) }
+			#text_editor.definitions.append(split_dict[1][0]) # = split_dict[2][0].hex_to_int()
 		elif split_dict[2][0].is_valid_int():
 			if split_dict[2][0].length() > 0 and split_dict[2][0][0] == "+":
 				return color_map
-			text_editor.definitions.append(split_dict[1][0]) # = split_dict[2][0].to_int()
+			color_map[split_dict[2][1]] = { "color": Color.hex(0x4EC9B0FF) }
+			#text_editor.definitions.append(split_dict[1][0]) # = split_dict[2][0].to_int()
+		elif split_dict[2][0] in REGISTERS:
+			color_map[split_dict[2][1]] = { "color": Color.hex(0x9CDCFEFF) }
+			color_map[split_dict[2][1] + 2] = { "color": Color.hex(0xFFFFFFFF) }
+		elif split_dict[2][0] in CONDITIONS:
+			color_map[split_dict[2][1]] = { "color": Color.hex(0x8878D6FF) }
+			color_map[split_dict[2][1] + split_dict[2][0].length()] = { "color": Color.hex(0xFFFFFFFF) }
 		else:
 			return color_map
-		color_map[split_dict[2][1]] = { "color": Color.hex(0x4EC9B0FF) }
 		if comment_index != -1:
 			color_map[comment_index] = { "color": Color.hex(0x858585FF) }
 		return color_map
