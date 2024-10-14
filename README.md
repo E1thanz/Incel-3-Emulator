@@ -18,7 +18,15 @@ Welcome to the **Incel 3 Godot Emulator**! This is a Godot application designed 
 
 ### Requirement
 
-Before using the Emulator make sure you have Python 3.12.6 installed on your machine
+Before using the Emulator make sure you have:
+- #### Python version
+```
+Python 3.12.6
+```
+- #### Libraries
+```
+mcschematic 11.4.2
+```
 If you're attempting to edit this in Godot, make sure the godot version is 4.3
 
 ### Download
