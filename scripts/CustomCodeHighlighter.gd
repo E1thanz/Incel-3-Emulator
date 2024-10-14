@@ -216,8 +216,8 @@ func _get_line_syntax_highlighting(line: int) -> Dictionary:
 				elif split_dict[index][0].begins_with("."):
 					color_map[split_dict[index][1]] = { "color": Color.hex(0xE8E892FF)}
 					color_map[split_dict[index][1] + split_dict[index][0].length()] = { "color": Color.hex(0xFFFFFFFF) }
-				elif func_output.substr(0, 5) == "Error":
-						return color_map
+				#elif func_output.substr(0, 5) == "Error":
+						#return color_map
 		
 	if comment_index != -1:
 		color_map[comment_index] = { "color": Color.hex(0x858585FF) }
