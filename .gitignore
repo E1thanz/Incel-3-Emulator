@@ -1,5 +1,5 @@
 # Godot 4+ specific ignores
 .godot/
 PythonFiles/assemblyFile.txt
-PythonFiles/venv
 Resources/something.txt
+PythonFiles/venv/
