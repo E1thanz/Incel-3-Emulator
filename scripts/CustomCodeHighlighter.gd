@@ -120,7 +120,14 @@ func _get_supported_languages() -> PackedStringArray:
 func _get_line_syntax_highlighting(line: int) -> Dictionary:
 	var color_map = {}
 	var text_editor = get_text_edit()
-	var prog_line = text_editor.get_line(line).strip_edges().to_lower()
+	var prog_line = text_editor.get_line(line)
+	var color_offset = 0
+	for character in prog_line:
+		if character in [" ", "\t"]:
+			color_offset += 1
+		else:
+			break
+	prog_line = prog_line.strip_edges().to_lower()
 	
 	var comment_index = -1
 	for symbol in ["//", "#", ";"]:
@@ -129,23 +136,23 @@ func _get_line_syntax_highlighting(line: int) -> Dictionary:
 			prog_line = prog_line.split(symbol)[0].strip_edges()
 				
 	if prog_line.is_empty() and comment_index != -1:
-		color_map[0] = { "color": Color.hex(0x858585FF) }
+		color_map[color_offset] = { "color": Color.hex(0x858585FF) }
 		return color_map
 		
 	if prog_line.begins_with(">"):
 		if not (prog_line.substr(1).is_valid_int() and prog_line[1] != "-" and prog_line[1] != "+"):
 			return color_map
-		color_map[0] = { "color": Color.hex(0xC586C0FF)}
+		color_map[color_offset] = { "color": Color.hex(0xC586C0FF)}
 		if comment_index != -1:
-			color_map[comment_index] = { "color": Color.hex(0x858585FF) }
+			color_map[color_offset + comment_index] = { "color": Color.hex(0x858585FF) }
 		return color_map
 	
 	if prog_line.begins_with("."):
 		if prog_line.substr(1).contains(" "):
 			return color_map
-		color_map[0] = { "color": Color.hex(0xE8E892FF)}
+		color_map[color_offset] = { "color": Color.hex(0xE8E892FF)}
 		if comment_index != -1:
-			color_map[comment_index] = { "color": Color.hex(0x858585FF) }
+			color_map[color_offset + comment_index] = { "color": Color.hex(0x858585FF) }
 		return color_map
 	
 	var split_str = prog_line.split(" ")
@@ -157,8 +164,8 @@ func _get_line_syntax_highlighting(line: int) -> Dictionary:
 		prog_line = prog_line.erase(0, offset)
 		
 	if split_dict[0][0] == "define":
-		color_map[0] = { "color": Color.hex(0xC56969FF) }
-		color_map[6] = { "color": Color.hex(0xFFFFFFFF) }
+		color_map[color_offset] = { "color": Color.hex(0xC56969FF) }
+		color_map[color_offset + 6] = { "color": Color.hex(0xFFFFFFFF) }
 		if split_dict.size() != 3:
 			return color_map
 		if split_dict[2][0].begins_with("0b"):
@@ -167,35 +174,35 @@ func _get_line_syntax_highlighting(line: int) -> Dictionary:
 			for character in split_dict[2][0].substr(2):
 				if character not in ["0", "1"]:
 					return color_map
-			color_map[split_dict[2][1]] = { "color": Color.hex(0x4EC9B0FF) }
+			color_map[color_offset + split_dict[2][1]] = { "color": Color.hex(0x4EC9B0FF) }
 			#text_editor.definitions.append(split_dict[1][0]) # = split_dict[2][0].bin_to_int()
 		elif split_dict[2][0].begins_with("0x"):
 			if split_dict[2][0].length() == 2:
 				return color_map
 			if not split_dict[2][0].is_valid_hex_number(true):
 				return color_map
-			color_map[split_dict[2][1]] = { "color": Color.hex(0x4EC9B0FF) }
+			color_map[color_offset + split_dict[2][1]] = { "color": Color.hex(0x4EC9B0FF) }
 			#text_editor.definitions.append(split_dict[1][0]) # = split_dict[2][0].hex_to_int()
 		elif split_dict[2][0].is_valid_int():
 			if split_dict[2][0].length() > 0 and split_dict[2][0][0] == "+":
 				return color_map
-			color_map[split_dict[2][1]] = { "color": Color.hex(0x4EC9B0FF) }
+			color_map[color_offset + split_dict[2][1]] = { "color": Color.hex(0x4EC9B0FF) }
 			#text_editor.definitions.append(split_dict[1][0]) # = split_dict[2][0].to_int()
 		elif split_dict[2][0] in REGISTERS:
-			color_map[split_dict[2][1]] = { "color": Color.hex(0x9CDCFEFF) }
-			color_map[split_dict[2][1] + 2] = { "color": Color.hex(0xFFFFFFFF) }
+			color_map[color_offset + split_dict[2][1]] = { "color": Color.hex(0x9CDCFEFF) }
+			color_map[color_offset + split_dict[2][1] + 2] = { "color": Color.hex(0xFFFFFFFF) }
 		elif split_dict[2][0] in CONDITIONS:
-			color_map[split_dict[2][1]] = { "color": Color.hex(0x8878D6FF) }
-			color_map[split_dict[2][1] + split_dict[2][0].length()] = { "color": Color.hex(0xFFFFFFFF) }
+			color_map[color_offset + split_dict[2][1]] = { "color": Color.hex(0x8878D6FF) }
+			color_map[color_offset + split_dict[2][1] + split_dict[2][0].length()] = { "color": Color.hex(0xFFFFFFFF) }
 		else:
 			return color_map
 		if comment_index != -1:
-			color_map[comment_index] = { "color": Color.hex(0x858585FF) }
+			color_map[color_offset + comment_index] = { "color": Color.hex(0x858585FF) }
 		return color_map
 		
 	if split_dict[0][0] in INSTRUCTIONS:
-		color_map[0] = { "color": Color.hex(0x569CD6FF) }
-		color_map[split_dict[0][0].length()] = { "color": Color.hex(0xFFFFFFFF) }
+		color_map[color_offset] = { "color": Color.hex(0x569CD6FF) }
+		color_map[color_offset + split_dict[0][0].length()] = { "color": Color.hex(0xFFFFFFFF) }
 		
 		var parameter_count = split_dict.size() - 1
 		if parameter_count in INSTRUCTIONS[split_dict[0][0]][0]:
@@ -205,21 +212,21 @@ func _get_line_syntax_highlighting(line: int) -> Dictionary:
 				var func_output: String = INSTRUCTIONS[split_dict[0][0]][1 + instruction_type][parameter].call(split_str[index], line, split_str[0])
 				
 				if split_dict[index][0] in REGISTERS:
-					color_map[split_dict[index][1]] = { "color": Color.hex(0x9CDCFEFF) }
-					color_map[split_dict[index][1] + 2] = { "color": Color.hex(0xFFFFFFFF) }
+					color_map[color_offset + split_dict[index][1]] = { "color": Color.hex(0x9CDCFEFF) }
+					color_map[color_offset + split_dict[index][1] + 2] = { "color": Color.hex(0xFFFFFFFF) }
 				elif split_dict[index][0].begins_with("0b") or split_dict[index][0].begins_with("0x") or split_dict[index][0].is_valid_int():
-					color_map[split_dict[index][1]] = { "color": Color.hex(0x4EC9B0FF) }
-					color_map[split_dict[index][1] + split_dict[index][0].length()] = { "color": Color.hex(0xFFFFFFFF) }
+					color_map[color_offset + split_dict[index][1]] = { "color": Color.hex(0x4EC9B0FF) }
+					color_map[color_offset + split_dict[index][1] + split_dict[index][0].length()] = { "color": Color.hex(0xFFFFFFFF) }
 				elif split_dict[index][0] in CONDITIONS:
-					color_map[split_dict[index][1]] = { "color": Color.hex(0x8878D6FF) }
-					color_map[split_dict[index][1] + split_dict[index][0].length()] = { "color": Color.hex(0xFFFFFFFF) }
+					color_map[color_offset + split_dict[index][1]] = { "color": Color.hex(0x8878D6FF) }
+					color_map[color_offset + split_dict[index][1] + split_dict[index][0].length()] = { "color": Color.hex(0xFFFFFFFF) }
 				elif split_dict[index][0].begins_with("."):
-					color_map[split_dict[index][1]] = { "color": Color.hex(0xE8E892FF)}
-					color_map[split_dict[index][1] + split_dict[index][0].length()] = { "color": Color.hex(0xFFFFFFFF) }
+					color_map[color_offset + split_dict[index][1]] = { "color": Color.hex(0xE8E892FF)}
+					color_map[color_offset + split_dict[index][1] + split_dict[index][0].length()] = { "color": Color.hex(0xFFFFFFFF) }
 				#elif func_output.substr(0, 5) == "Error":
 						#return color_map
 		
 	if comment_index != -1:
-		color_map[comment_index] = { "color": Color.hex(0x858585FF) }
+		color_map[color_offset + comment_index] = { "color": Color.hex(0x858585FF) }
 		
 	return color_map

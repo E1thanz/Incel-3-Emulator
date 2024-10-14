@@ -185,7 +185,7 @@ shortcut = SubResource("Shortcut_qrg7t")
 text = "Save"
 
 [node name="Button4" type="Button" parent="MarginContainer/HBoxContainer/VBoxContainer/top bar/MarginContainer/ColorRect/MarginContainer/HBoxContainer"]
-custom_minimum_size = Vector2(260, 0)
+custom_minimum_size = Vector2(130, 0)
 layout_mode = 2
 theme_override_colors/font_focus_color = Color(0.372549, 0.701961, 0.960784, 1)
 theme_override_colors/font_color = Color(0.372549, 0.701961, 0.960784, 1)
@@ -195,7 +195,7 @@ theme_override_styles/focus = SubResource("StyleBoxEmpty_h23tr")
 theme_override_styles/hover = SubResource("StyleBoxFlat_uc4j2")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_ye7id")
 theme_override_styles/normal = SubResource("StyleBoxFlat_ye7id")
-text = "Export Schematic"
+text = "Export"
 
 [node name="Label" type="Label" parent="MarginContainer/HBoxContainer/VBoxContainer/top bar/MarginContainer/ColorRect"]
 layout_mode = 1

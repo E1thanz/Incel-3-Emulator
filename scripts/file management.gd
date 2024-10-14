@@ -144,13 +144,8 @@ func _compile_press():
 		if not save_file(activeButton):
 			return
 	
-	var pythonPath = "python"
-	
-	# THIS IS A TEMPORARY LINUX SOLUTION
-	if OS.get_name() == "Linux":
-		pythonPath = "python3"
 	var pythonOut = []
-	OS.execute(pythonPath, ["./PythonFiles/Assembler.py", activeButton.get_meta("FilePath")], pythonOut, true)
+	OS.execute("res://PythonFiles/venv/Scripts/python.exe", ["./PythonFiles/Assembler.py", activeButton.get_meta("FilePath")], pythonOut, true)
 	if not pythonOut[0].strip_edges().is_empty():
 		%"Error Window".show_error(pythonOut[0].strip_edges())
 	else:
@@ -169,7 +164,7 @@ func _compile_press():
 		else:
 			results.append("./PythonFiles/program.schem")
 		pythonOut.clear()
-		OS.execute(pythonPath, ["./PythonFiles/Schematic Generator.py", "./PythonFiles/assemblyFile.txt", results[0].strip_edges().replace("\\", "/")], pythonOut, true)
+		OS.execute("res://PythonFiles/venv/Scripts/python.exe", ["./PythonFiles/Schematic Generator.py", "./PythonFiles/assemblyFile.txt", results[0].strip_edges().replace("\\", "/")], pythonOut, true)
 
 func _on_program_view_text_changed():
 	if not activeButton.get_meta("Changed"):
