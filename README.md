@@ -18,7 +18,7 @@ Welcome to the **Incel 3 Godot Emulator**! This is a Godot application designed 
 
 ### Download
 
-To get started, grab the latest release of the emulator from the [Releases Page](https://github.com/username/repo-name/releases/latest). <!-- Replace with the actual link to the latest release -->
+To get started, grab the latest release of the emulator from the [Releases Page](https://github.com/E1thanz/Incel-3-Emulator/releases). <!-- Replace with the actual link to the latest release -->
 
 ### Installation
 
