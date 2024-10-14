@@ -12,63 +12,59 @@ const CONDITIONS = {"novf": "000", "ovf": "001", "nc": "010", "c": "011", "nmsb"
 var definitions = {}
 var labels = []
 
-func Register(value: String, line: int, instruction: String) -> String:
-	if value in REGISTERS:
-		#return REGISTERS[value]
-		return ""
-	elif value.is_valid_int() and value[1] != "+":
-		var int_value = value.to_int()
-		if int_value >= 0 and int_value < 8:
-			return ""
-		#return "%0*d" % [bits, binaryOutput]
-	elif value.begins_with("0b"):
+func Parse_Literal(value: String, bits: int, line: int, instruction: String, param_type: String):
+	if value.begins_with("0b"):
 		for character in value.substr(2):
 			if character not in ["0", "1"]:
-				return "Error: binary form literal with non binary digits given on line %s for instruction %s" % [line, instruction]
+				return "Error: binary form %s literal with non binary digits given on line %s for instruction %s" % [param_type, line, instruction]
 		var binaryOutput = value.substr(2)
-		if binaryOutput.length() > 3:
-			return "Error: binary form literal too large to fit in 3 bits on line %s for instruction %s" % [line, instruction]
+		if binaryOutput.length() > bits:
+			return "Error: binary form %s literal is too large to fit in %s bits on line %s for instruction %s" % [param_type, bits, line, instruction]
 		#return "%0*s" % [bits, binaryOutput]
 		return ""
-	elif value.begins_with("0x"):
+	if value.begins_with("0x"):
 		if value.is_valid_hex_number(true):
 			var binaryOutput = String.num_uint64(value.hex_to_int(), 2)
-			if binaryOutput.length() > 3:
-				return "Error: hex form literal too large to fit in 3 bits on line %s for instruction %s" % [line, instruction]
+			if binaryOutput.length() > bits:
+				return "Error: hex form %s literal is too large to fit in %s bits on line %s for instruction %s" % [param_type, bits, line, instruction]
 			#return "%0*d" % [bits, binaryOutput]
 			return ""
-		return "Error: hex form literal with non hex digits given on line %s for instruction %s" % [line, instruction]
+		return "Error: hex form %s literal with non hex digits given on line %s for instruction %s" % [param_type, line, instruction]
+	if value.is_valid_int() and (value.length() == 1 or value[1] != "+"):
+		var int_value = value.to_int()
+		var binaryOutput = ""
+		if int_value < 0:
+			binaryOutput = String.num_int64(int_value, 2)
+		else:
+			binaryOutput = String.num_uint64(int_value, 2)
+		if binaryOutput.length() > bits:
+			return "Error: decimal form %s literal is too large to fit in %s bits on line %s for instruction %s" % [param_type, bits, line, instruction]
+		#return "%0*d" % [bits, binaryOutput]
+		return ""
+	return "Error: %s literal on line %s for instruction %s is not in any recognizable form: 0b - binary, 0x - hex, otherwise decimal" % [param_type, line, instruction]
+
+func Register(value: String, line: int, instruction: String) -> String:
+	if value in definitions:
+		if definitions[value] in REGISTERS:
+			return ""
+		return Parse_Literal(definitions[value], 3, line, instruction, "register")
+	if value in REGISTERS:
+		return ""
 	return "Error: invalid register on line %s for instruction %s, possible registers are: \n%s" % [line, instruction, REGISTERS]
 
 func Condition(value: String, line: int, instruction: String) -> String:
+	if value in definitions:
+		if definitions[value] in CONDITIONS:
+			return ""
+		return Parse_Literal(definitions[value], 3, line, instruction, "condition")
 	if value in CONDITIONS:
-		#return CONDITIONS[value]
 		return ""
-	elif value.is_valid_int() and value[1] != "+":
-		var int_value = value.to_int()
-		if int_value >= 0 and int_value < 8:
-			return ""
-		#return "%0*d" % [bits, binaryOutput]
-	elif value.begins_with("0b"):
-		for character in value.substr(2):
-			if character not in ["0", "1"]:
-				return "Error: binary form literal with non binary digits given on line %s for instruction %s" % [line, instruction]
-		var binaryOutput = value.substr(2)
-		if binaryOutput.length() > 3:
-			return "Error: binary form literal too large to fit in 3 bits on line %s for instruction %s" % [line, instruction]
-		#return "%0*s" % [bits, binaryOutput]
-		return ""
-	elif value.begins_with("0x"):
-		if value.is_valid_hex_number(true):
-			var binaryOutput = String.num_uint64(value.hex_to_int(), 2)
-			if binaryOutput.length() > 3:
-				return "Error: hex form literal too large to fit in 3 bits on line %s for instruction %s" % [line, instruction]
-			#return "%0*d" % [bits, binaryOutput]
-			return ""
-		return "Error: hex form literal with non hex digits given on line %s for instruction %s" % [line, instruction]
 	return "Error: invalid condition on line %s for instruction %s, possible conditions are: \n%s" % [line, instruction, CONDITIONS]
 
 func Single(value: String, line: int, instruction: String) -> String:
+	if value in definitions:
+		if definitions[value] in ["0", "1", "0b0", "0b1", "0x0", "0x1"]:
+			return ""
 	if value in ["0", "1", "0b0", "0b1", "0x0", "0x1"]:
 		return ""
 	return "Error: invalid single on line %s for instruction %s, a single can be either a 0 or a 1" % [line, instruction]
@@ -79,36 +75,9 @@ func Label(value: String, line: int, instruction: String) -> String:
 	return "Error: invalid single on line %s for instruction %s, a single can be either a 0 or a 1" % [line, instruction]
 
 func Immediate(value: String, bits: int, line: int, instruction: String) -> String:
-	# if value is in binary form
-	if value.begins_with("0b"):
-		for character in value.substr(2):
-			if character not in ["0", "1"]:
-				return "Error: binary form immediate with non binary digits given on line %s for instruction %s" % [line, instruction]
-		var binaryOutput = value.substr(2)
-		if binaryOutput.length() > bits:
-			return "Error: binary form immediate too large to fit in %s bits on line %s for instruction %s" % [bits, line, instruction]
-		#return "%0*s" % [bits, binaryOutput]
-		return ""
-	if value.begins_with("0x"):
-		if value.is_valid_hex_number(true):
-			var binaryOutput = String.num_uint64(value.hex_to_int(), 2)
-			if binaryOutput.length() > bits:
-				return "Error: hex form immediate too large to fit in %s bits on line %s for instruction %s" % [bits, line, instruction]
-			#return "%0*d" % [bits, binaryOutput]
-			return ""
-		return "Error: hex form immediate with non hex digits given on line %s for instruction %s" % [line, instruction]
-	if value.is_valid_int() and value[1] != "+":
-		var int_value = value.to_int()
-		var binaryOutput = ""
-		if int_value < 0:
-			binaryOutput = String.num_int64(int_value, 2)
-		else:
-			binaryOutput = String.num_uint64(int_value, 2)
-		if binaryOutput.length() > bits:
-			return "Error: decimal form immediate too large to fit in %s bits on line %s for instruction %s" % [bits, line, instruction]
-		#return "%0*d" % [bits, binaryOutput]
-		return ""
-	return "Error: immediate on line %s for instruction %s is not in any recognizable form: 0b - binary, 0x - hex, otherwise decimal" % [line, instruction]
+	if value in definitions:
+		value = definitions[value]
+	return Parse_Literal(value, bits, line, instruction, "immediate")
 
 var INSTRUCTIONS = {"add": [[3, 4],
 							[Callable(self, "Register"), Callable(self, "Register"), Callable(self, "Register")],
@@ -165,13 +134,9 @@ var INSTRUCTIONS = {"add": [[3, 4],
 					"pld": [[2],
 							[Callable(self, "Register"), func (value: String, line: int, instruction: String): return Immediate(value, 5, line, instruction)]]}
 
-var available_pages = []
 
 func _ready():
 	syntax_highlighter = highlighter
-	for i in 128:
-		available_pages.append(i)
-	
 	#%"Program View".add_gutter(1)
 	#%"Program View".set_gutter_width(1, 35)
 	#%"Program View".set_gutter_type(1, TextEdit.GUTTER_TYPE_ICON)
@@ -182,7 +147,12 @@ func _ready():
 	#return 1
 
 func _on_text_changed() -> void:
-	var valid_line = 1
+	definitions.clear()
+	labels.clear()
+	var available_pages = []
+	for i in 128:
+		available_pages.append(i)
+	var in_page_line = 1
 	for line in get_line_count():
 		set_line_background_color(line, Color.hex(0x00000000))
 		var prog_line = get_line(line).strip_edges().to_lower()
@@ -197,11 +167,21 @@ func _on_text_changed() -> void:
 			continue
 			
 		if prog_line.begins_with("."):
-			if prog_line.substr(1).contains(" "):
-				set_line_background_color(line, Color.hex(0xC5696966))
-			else:
-				labels.append(prog_line)
+			if not prog_line.substr(1).contains(" "):
+				if prog_line in labels:
+					set_line_background_color(line, Color.hex(0xC5696966))
+				else:
+					labels.append(prog_line)
 			continue
+		
+		if prog_line.begins_with(">"):
+			if prog_line.substr(1).is_valid_int() and prog_line[1] != "-" and prog_line[1] != "+":
+				var temp_index = available_pages.find(prog_line.substr(1).to_int())
+				if temp_index == -1:
+					set_line_background_color(line, Color.hex(0xC5696966))
+				else:
+					available_pages.remove_at(temp_index)
+				continue
 		
 		var split_str = prog_line.split(" ")
 		var split_dict = []
@@ -237,7 +217,9 @@ func _on_text_changed() -> void:
 			continue
 		
 	for line in get_line_count():
-		set_line_gutter_text(line, 0, "")
+		var line_number = "%04d" % [line]
+		set_line_gutter_text(line, 0, line_number)
+		set_line_gutter_item_color(line, 0, Color.hex(0x919191ff))
 		var prog_line = get_line(line).strip_edges().to_lower()
 		
 		var comment_index = -1
@@ -250,12 +232,17 @@ func _on_text_changed() -> void:
 			continue
 		
 		if prog_line.begins_with(">"):
-			if not (prog_line.substr(1).is_valid_int() and prog_line[1] != "-" and prog_line[1] != "+"):
-				set_line_background_color(line, Color.hex(0xC5696966))
-				continue
-			set_line_background_color(line, Color.hex(0x00000000))
-			
+			if prog_line.substr(1).is_valid_int() and prog_line[1] != "-" and prog_line[1] != "+":
+				if get_line_background_color(line) == Color.hex(0x00000000):
+					in_page_line = 1
 			continue
+		
+		if in_page_line > 32:
+			if available_pages.size() == 0:
+				set_line_background_color(line, Color.hex(0xC5696966))
+			else:
+				available_pages.pop_at(0)
+				in_page_line = 0
 		
 		if prog_line.begins_with("."):
 			if prog_line.substr(1).contains(" "):
@@ -299,10 +286,10 @@ func _on_text_changed() -> void:
 			continue
 				
 		if split_dict[0][0] in INSTRUCTIONS:
-			var line_number = "%04d" % [valid_line]
-			set_line_gutter_text(line, 0, line_number)
-			set_line_gutter_item_color(line, 0, Color.hex(0x919191ff))
-			valid_line += 1
+			#var line_number = "%04d" % [valid_line]
+			#set_line_gutter_text(line, 0, line_number)
+			#set_line_gutter_item_color(line, 0, Color.hex(0x919191ff))
+			in_page_line += 1
 			
 			var parameter_count = split_dict.size() - 1
 			if parameter_count in INSTRUCTIONS[split_dict[0][0]][0]:
@@ -310,12 +297,11 @@ func _on_text_changed() -> void:
 				for parameter in parameter_count:
 					var index = parameter + 1
 					
-					if split_str[index] in definitions:
-						split_str[index] = definitions[split_str[index]]
-					
 					var func_output: String = INSTRUCTIONS[split_dict[0][0]][1 + instruction_type][parameter].call(split_str[index], line, split_str[0])
 					
 					if func_output.substr(0, 5) == "Error":
+						print(split_str)
+						print(func_output)
 						set_line_background_color(line, Color.hex(0xC5696966))
 						break
 			else:

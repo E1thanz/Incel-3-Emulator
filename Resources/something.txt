@@ -1,6 +1,1 @@
-fix my fucking syntax highlighting not letting me put comments on anything
-fix same thing with error checks
 add a line under the textedit to show the first error encountered
-add the schematic button
-make it so that you cannot do //#; at the same line, or at the very least
-it picks the smallest one

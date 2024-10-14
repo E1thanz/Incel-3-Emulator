@@ -113,8 +113,10 @@ func save_file(button) -> bool:
 	if not button.get_meta("Changed"):
 		return false
 	if button.get_meta("FilePath").is_empty():
+		# THIS IS A TEMPORARY LINUX SOLUTION
+		if OS.get_name() == "Linux":
+			return false
 		var results = []
-		print("we're literally executing a shell script wtf")
 		OS.execute("powershell.exe", PackedStringArray(["\"Add-Type -AssemblyName System.Windows.Forms;
 															$FileBrowser = New-Object System.Windows.Forms.SaveFileDialog;
 															$FileBrowser.initialDirectory = (Get-Item .).FullName + \\\"\\Files\\\";
@@ -137,16 +139,37 @@ func save_file(button) -> bool:
 	button.set_meta("Changed", false)
 	return true
 
-#func _compile_press():
-	#if activeButton.get_meta("FilePath").is_empty():
-		#return
-	#var pythonPath = "python"
-	#var pythonOut = []
-	#OS.execute(pythonPath, [".\\PythonFiles\\Assembler.py", activeButton.get_meta("FilePath")], pythonOut, true)
-	#var file = FileAccess.open(".\\PythonFiles\\assemblyFile.txt", FileAccess.READ)
-	#%"Assembly View".text = file.get_as_text()
-	#if not pythonOut[0].is_empty():
-		#%"Error Window".show_error(pythonOut[0])
+func _compile_press():
+	if activeButton.get_meta("FilePath").is_empty():
+		if not save_file(activeButton):
+			return
+	
+	var pythonPath = "python"
+	
+	# THIS IS A TEMPORARY LINUX SOLUTION
+	if OS.get_name() == "Linux":
+		pythonPath = "python3"
+	var pythonOut = []
+	OS.execute(pythonPath, ["./PythonFiles/Assembler.py", activeButton.get_meta("FilePath")], pythonOut, true)
+	if not pythonOut[0].strip_edges().is_empty():
+		%"Error Window".show_error(pythonOut[0].strip_edges())
+	else:
+		var results = []
+		
+		# THIS IS A TEMPORARY LINUX SOLUTION
+		if OS.get_name() == "Windows":
+			OS.execute("powershell.exe", PackedStringArray(["\"Add-Type -AssemblyName System.Windows.Forms;
+																$FileBrowser = New-Object System.Windows.Forms.SaveFileDialog;
+																$FileBrowser.initialDirectory = (Get-Item .).FullName + \\\"\\Files\\\";
+																$FileBrowser.filter = \\\"schem files (*.schem)|*.schem\\\";
+																[void]$FileBrowser.ShowDialog();
+																$FileBrowser.FileName\""]), results, true)
+			if results.is_empty() or results[0].strip_edges().is_empty():
+				return false
+		else:
+			results.append("./PythonFiles/program.schem")
+		pythonOut.clear()
+		OS.execute(pythonPath, ["./PythonFiles/Schematic Generator.py", "./PythonFiles/assemblyFile.txt", results[0].strip_edges().replace("\\", "/")], pythonOut, true)
 
 func _on_program_view_text_changed():
 	if not activeButton.get_meta("Changed"):

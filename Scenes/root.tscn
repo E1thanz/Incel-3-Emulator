@@ -197,6 +197,24 @@ theme_override_styles/pressed = SubResource("StyleBoxFlat_ye7id")
 theme_override_styles/normal = SubResource("StyleBoxFlat_ye7id")
 text = "Export Schematic"
 
+[node name="Label" type="Label" parent="MarginContainer/HBoxContainer/VBoxContainer/top bar/MarginContainer/ColorRect"]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -147.0
+offset_top = -16.5
+offset_right = -10.0
+offset_bottom = 16.5
+grow_horizontal = 0
+grow_vertical = 2
+size_flags_horizontal = 4
+theme_override_colors/font_color = Color(0.372549, 0.701961, 0.960784, 1)
+theme_override_fonts/font = ExtResource("2_x3dv1")
+text = "VERSION 1.0"
+
 [node name="Edit View Rect" type="ColorRect" parent="MarginContainer/HBoxContainer/VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
@@ -410,6 +428,7 @@ metadata/_edit_use_anchors_ = true
 [connection signal="pressed" from="MarginContainer/HBoxContainer/VBoxContainer/top bar/MarginContainer/ColorRect/MarginContainer/HBoxContainer/Button5" to="MarginContainer/HBoxContainer/VBoxContainer/top bar" method="create_new_file" binds= ["New File"]]
 [connection signal="pressed" from="MarginContainer/HBoxContainer/VBoxContainer/top bar/MarginContainer/ColorRect/MarginContainer/HBoxContainer/Button" to="MarginContainer/HBoxContainer/VBoxContainer/top bar" method="_open_file_press"]
 [connection signal="pressed" from="MarginContainer/HBoxContainer/VBoxContainer/top bar/MarginContainer/ColorRect/MarginContainer/HBoxContainer/Button2" to="MarginContainer/HBoxContainer/VBoxContainer/top bar" method="_save_file_press"]
+[connection signal="button_up" from="MarginContainer/HBoxContainer/VBoxContainer/top bar/MarginContainer/ColorRect/MarginContainer/HBoxContainer/Button4" to="MarginContainer/HBoxContainer/VBoxContainer/top bar" method="_compile_press"]
 [connection signal="text_changed" from="MarginContainer/HBoxContainer/VBoxContainer/Edit View Rect/VBoxContainer/MarginContainer/Program View" to="MarginContainer/HBoxContainer/VBoxContainer/top bar" method="_on_program_view_text_changed"]
 [connection signal="text_changed" from="MarginContainer/HBoxContainer/VBoxContainer/Edit View Rect/VBoxContainer/MarginContainer/Program View" to="MarginContainer/HBoxContainer/VBoxContainer/Edit View Rect/VBoxContainer/MarginContainer/Program View" method="_on_text_changed"]
 [connection signal="text_set" from="MarginContainer/HBoxContainer/VBoxContainer/Edit View Rect/VBoxContainer/MarginContainer/Program View" to="MarginContainer/HBoxContainer/VBoxContainer/Edit View Rect/VBoxContainer/MarginContainer/Program View" method="_on_text_changed"]

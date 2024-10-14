@@ -13,7 +13,7 @@ config_version=5
 config/name="Incel 3 Emulator"
 run/main_scene="res://Scenes/root.tscn"
 config/features=PackedStringArray("4.3", "Mobile")
-config/icon="res://icon.svg"
+config/icon="res://Resources/Incel IDE Icon.png"
 
 [display]
 

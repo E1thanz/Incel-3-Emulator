@@ -1,2 +1,5 @@
 # Godot 4+ specific ignores
 .godot/
+Files/
+PythonFiles/assemblyFile.txt
+Resources/something.txt
