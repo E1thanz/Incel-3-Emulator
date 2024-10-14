@@ -213,7 +213,7 @@ grow_vertical = 2
 size_flags_horizontal = 4
 theme_override_colors/font_color = Color(0.372549, 0.701961, 0.960784, 1)
 theme_override_fonts/font = ExtResource("2_x3dv1")
-text = "VERSION 1.0"
+text = "VERSION 1.1"
 
 [node name="Edit View Rect" type="ColorRect" parent="MarginContainer/HBoxContainer/VBoxContainer"]
 unique_name_in_owner = true

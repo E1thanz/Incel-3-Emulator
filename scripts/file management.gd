@@ -145,7 +145,8 @@ func _compile_press():
 			return
 	
 	var pythonOut = []
-	OS.execute("res://PythonFiles/venv/Scripts/python.exe", ["./PythonFiles/Assembler.py", activeButton.get_meta("FilePath")], pythonOut, true)
+	OS.execute("./PythonFiles/venv/Scripts/python.exe", ["./PythonFiles/Assembler.py", activeButton.get_meta("FilePath")], pythonOut, true)
+	
 	if not pythonOut[0].strip_edges().is_empty():
 		%"Error Window".show_error(pythonOut[0].strip_edges())
 	else:
@@ -164,7 +165,7 @@ func _compile_press():
 		else:
 			results.append("./PythonFiles/program.schem")
 		pythonOut.clear()
-		OS.execute("res://PythonFiles/venv/Scripts/python.exe", ["./PythonFiles/Schematic Generator.py", "./PythonFiles/assemblyFile.txt", results[0].strip_edges().replace("\\", "/")], pythonOut, true)
+		OS.execute("./PythonFiles/venv/Scripts/python.exe", ["./PythonFiles/Schematic Generator.py", "./PythonFiles/assemblyFile.txt", results[0].strip_edges().replace("\\", "/")], pythonOut, true)
 
 func _on_program_view_text_changed():
 	if not activeButton.get_meta("Changed"):
