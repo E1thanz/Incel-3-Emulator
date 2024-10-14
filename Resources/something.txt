@@ -1,1 +1,0 @@
-add a line under the textedit to show the first error encountered
