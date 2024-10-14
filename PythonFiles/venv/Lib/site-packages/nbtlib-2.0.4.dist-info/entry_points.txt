@@ -1,3 +1,0 @@
-[console_scripts]
-nbt=nbtlib.cli:main
-
