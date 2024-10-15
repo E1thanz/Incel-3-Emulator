@@ -83,7 +83,7 @@ func _open_file_press():
 														$FileBrowser = New-Object System.Windows.Forms.OpenFileDialog; 
 														$FileBrowser.initialDirectory = (Get-Item .).FullName + \\\"\\Files\\\";
 														$FileBrowser.filter = \\\"txt files (*.txt)|*.txt\\\";
-														[void]$FileBrowser.ShowDialog(); 
+														[void]$FileBrowser.ShowDialog([System.Windows.Forms.Form]::FromHandle((Get-Process -Id $PID).MainWindowHandle)); 
 														$FileBrowser.FileName\""]), results, true)
 	if results.is_empty() or results[0].strip_edges().is_empty():
 		return
@@ -121,7 +121,7 @@ func save_file(button) -> bool:
 															$FileBrowser = New-Object System.Windows.Forms.SaveFileDialog;
 															$FileBrowser.initialDirectory = (Get-Item .).FullName + \\\"\\\\Files\\\\\\\";
 															$FileBrowser.filter = \\\"txt files (*.txt)|*.txt\\\";
-															[void]$FileBrowser.ShowDialog();
+															[void]$FileBrowser.ShowDialog([System.Windows.Forms.Form]::FromHandle((Get-Process -Id $PID).MainWindowHandle));
 															$FileBrowser.FileName\""]), results, true)
 		if results.is_empty() or results[0].strip_edges().is_empty():
 			return false
@@ -158,7 +158,7 @@ func _compile_press():
 																$FileBrowser = New-Object System.Windows.Forms.SaveFileDialog;
 																$FileBrowser.initialDirectory = (Get-Item .).FullName + \\\"\\Files\\\";
 																$FileBrowser.filter = \\\"schem files (*.schem)|*.schem\\\";
-																[void]$FileBrowser.ShowDialog();
+																[void]$FileBrowser.ShowDialog([System.Windows.Forms.Form]::FromHandle((Get-Process -Id $PID).MainWindowHandle));
 																$FileBrowser.FileName\""]), results, true)
 			if results.is_empty() or results[0].strip_edges().is_empty():
 				return false
