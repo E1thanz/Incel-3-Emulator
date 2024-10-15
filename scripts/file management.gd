@@ -2,6 +2,24 @@ extends ColorRect
 
 const programButtonScene = preload("res://Scenes/File Button.tscn")
 
+var fileDialog = "\"Add-Type -AssemblyName System.Windows.Forms;
+										$form = New-Object System.Windows.Forms.Form;
+										$form.TopMost = $true;
+										$form.Size = New-Object System.Drawing.Size(0, 0);
+										$form.StartPosition = 'Manual';
+										$form.Location = New-Object System.Drawing.Point(-1000, -1000);
+										$FileBrowser = New-Object System.Windows.Forms.%sFileDialog;
+										$FileBrowser.initialDirectory = (Get-Item .).FullName + \\\"\\Files\\\";
+										$FileBrowser.filter = \\\"%s files (*.%s)|*.%s\\\";
+										$form.add_Shown({
+											$null = $FileBrowser.ShowDialog($form);
+											Write-Host $FileBrowser.FileName
+											$FileBrowser.Dispose();
+											$form.Close();
+										})
+										$form.ShowDialog();\""
+
+
 var activeButton = null
 var fileButtons = []
 const maximum_files = 5
@@ -64,6 +82,7 @@ func create_new_file(name):
 	newFileButton.get_child(0).get_child(1).text = name
 	activeButton = newFileButton
 	%"Program View".text = ""
+	%"Edit View Rect".color = Color.hex(0x2d2d2dff)
 	
 func _notification(notification):
 	if notification == NOTIFICATION_WM_CLOSE_REQUEST:
@@ -79,23 +98,25 @@ func _open_file_press():
 		return
 	
 	var results = []
-	OS.execute("powershell.exe", PackedStringArray(["\"Add-Type -AssemblyName System.Windows.Forms; 
-														$FileBrowser = New-Object System.Windows.Forms.OpenFileDialog; 
-														$FileBrowser.initialDirectory = (Get-Item .).FullName + \\\"\\Files\\\";
-														$FileBrowser.filter = \\\"txt files (*.txt)|*.txt\\\";
-														[void]$FileBrowser.ShowDialog([System.Windows.Forms.Form]::FromHandle((Get-Process -Id $PID).MainWindowHandle)); 
-														$FileBrowser.FileName\""]), results, true)
-	if results.is_empty() or results[0].strip_edges().is_empty():
+	OS.execute("powershell.exe", PackedStringArray([fileDialog % ["Open", "txt", "txt", "txt"]]), results, true)
+	
+	var processed_results = results[0].strip_edges().split("\n")[0]
+	
+	if processed_results == "Cancel":
 		return
 	
 	for button in fileButtons:
-		if button.get_meta("FilePath") == results[0].strip_edges():
+		if button.get_meta("FilePath") == processed_results:
 			return
 	
-	activeButton.selected = false
-	activeButton.update_selection()
-	create_new_file(Array(results[0].strip_edges().split("\\")).pop_back())
-	activeButton.set_meta("FilePath", results[0].strip_edges())
+	if activeButton.get_meta("FilePath") == "" and not activeButton.get_meta("Changed"):
+		fileButtons.erase(activeButton)
+		activeButton.queue_free()
+	else:
+		activeButton.selected = false
+		activeButton.update_selection()
+	create_new_file(Array(processed_results.split("\\")).pop_back())
+	activeButton.set_meta("FilePath", processed_results)
 		
 	var file = FileAccess.open(activeButton.get_meta("FilePath"), FileAccess.READ)
 	var file_text = file.get_as_text()
@@ -106,8 +127,11 @@ func _open_file_press():
 
 func _save_file_press():
 	for button in fileButtons:
-		save_file(button)
-	%"Edit View Rect".color = Color.hex(0x2d2d2dff)
+		if button == activeButton:
+			if save_file(button):
+				%"Edit View Rect".color = Color.hex(0x2d2d2dff)
+		else:
+			save_file(button)
 	
 func save_file(button) -> bool:
 	if not button.get_meta("Changed"):
@@ -117,16 +141,15 @@ func save_file(button) -> bool:
 		if OS.get_name() == "Linux":
 			return false
 		var results = []
-		OS.execute("powershell.exe", PackedStringArray(["\"Add-Type -AssemblyName System.Windows.Forms;
-															$FileBrowser = New-Object System.Windows.Forms.SaveFileDialog;
-															$FileBrowser.initialDirectory = (Get-Item .).FullName + \\\"\\\\Files\\\\\\\";
-															$FileBrowser.filter = \\\"txt files (*.txt)|*.txt\\\";
-															[void]$FileBrowser.ShowDialog([System.Windows.Forms.Form]::FromHandle((Get-Process -Id $PID).MainWindowHandle));
-															$FileBrowser.FileName\""]), results, true)
-		if results.is_empty() or results[0].strip_edges().is_empty():
+		
+		OS.execute("powershell.exe", PackedStringArray([fileDialog % ["Save", "txt", "txt", "txt"]]), results, true)
+		
+		var processed_results = results[0].strip_edges().split("\n")[0]
+	
+		if processed_results == "Cancel":
 			return false
 		
-		button.set_meta("FilePath", results[0].strip_edges())
+		button.set_meta("FilePath", processed_results)
 	
 	var split_path = Array(button.get_meta("FilePath").split("\\")).pop_back()
 	button.get_child(0).get_child(1).text = split_path
@@ -154,14 +177,15 @@ func _compile_press():
 		
 		# THIS IS A TEMPORARY LINUX SOLUTION
 		if OS.get_name() == "Windows":
-			OS.execute("powershell.exe", PackedStringArray(["\"Add-Type -AssemblyName System.Windows.Forms;
-																$FileBrowser = New-Object System.Windows.Forms.SaveFileDialog;
-																$FileBrowser.initialDirectory = (Get-Item .).FullName + \\\"\\Files\\\";
-																$FileBrowser.filter = \\\"schem files (*.schem)|*.schem\\\";
-																[void]$FileBrowser.ShowDialog([System.Windows.Forms.Form]::FromHandle((Get-Process -Id $PID).MainWindowHandle));
-																$FileBrowser.FileName\""]), results, true)
-			if results.is_empty() or results[0].strip_edges().is_empty():
+			OS.execute("powershell.exe", PackedStringArray([fileDialog % ["Save", "schem", "schem", "schem"]]), results, true)
+			
+			var processed_results = results[0].strip_edges().split("\n")[0]
+	
+			if processed_results == "Cancel":
 				return false
+			
+			results.clear()
+			results.append(processed_results)
 		else:
 			results.append("./PythonFiles/program.schem")
 		pythonOut.clear()
