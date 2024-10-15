@@ -119,7 +119,7 @@ func save_file(button) -> bool:
 		var results = []
 		OS.execute("powershell.exe", PackedStringArray(["\"Add-Type -AssemblyName System.Windows.Forms;
 															$FileBrowser = New-Object System.Windows.Forms.SaveFileDialog;
-															$FileBrowser.initialDirectory = (Get-Item .).FullName + \\\"\\Files\\\";
+															$FileBrowser.initialDirectory = (Get-Item .).FullName + \\\"\\\\Files\\\\\\\";
 															$FileBrowser.filter = \\\"txt files (*.txt)|*.txt\\\";
 															[void]$FileBrowser.ShowDialog();
 															$FileBrowser.FileName\""]), results, true)

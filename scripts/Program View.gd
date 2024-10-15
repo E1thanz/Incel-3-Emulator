@@ -8,9 +8,13 @@ const CONDITIONS = {"novf": "000", "ovf": "001", "nc": "010", "c": "011", "nmsb"
 					"!overflow": "000", "overflow": "001", "!carry": "010", "carry": "011", "!msb": "100", "!zero": "110", "zero": "111",
 					"!=": "110", "=": "111", "<": "010", ">=": "011", ">=0": "100", "<0": "101",
 					"!ovf": "000", "!c": "010", "!z": "110", "eq": "111", "neq": "110"}
+					
+const POSSIBLE_REGISTERS = ["r0", "r1", "r2", "r3", "r4", "r5", "r6", "r7"]
+const POSSIBLE_CONDITIONS = ["novf", "ovf", "nc", "c", "nmsb", "msb", "nz", "z", "!overflow", "overflow", "!carry", "carry", "!msb", "!zero", "zero",
+							"!=", "=", "<", ">=", ">=0", "<0", "!ovf", "!c", "!z", "eq", "neq"]
 
 var definitions = {}
-var labels = []
+var labels = {}
 
 func Parse_Literal(value: String, bits: int, line: int, instruction: String, param_type: String):
 	if value.begins_with("0b"):
@@ -50,7 +54,7 @@ func Register(value: String, line: int, instruction: String) -> String:
 		return Parse_Literal(definitions[value], 3, line, instruction, "register")
 	if value in REGISTERS:
 		return ""
-	return "Error: invalid register on line %s for instruction %s, possible registers are: \n%s" % [line, instruction, REGISTERS]
+	return "Error: invalid register on line %s for instruction %s, possible registers are: \n%s" % [line, instruction, POSSIBLE_REGISTERS]
 
 func Condition(value: String, line: int, instruction: String) -> String:
 	if value in definitions:
@@ -59,7 +63,7 @@ func Condition(value: String, line: int, instruction: String) -> String:
 		return Parse_Literal(definitions[value], 3, line, instruction, "condition")
 	if value in CONDITIONS:
 		return ""
-	return "Error: invalid condition on line %s for instruction %s, possible conditions are: \n%s" % [line, instruction, CONDITIONS]
+	return "Error: invalid condition on line %s for instruction %s, possible conditions are: \n%s" % [line, instruction, POSSIBLE_CONDITIONS]
 
 func Single(value: String, line: int, instruction: String) -> String:
 	if value in definitions:
@@ -134,6 +138,13 @@ var INSTRUCTIONS = {"add": [[3, 4],
 					"pld": [[2],
 							[Callable(self, "Register"), func (value: String, line: int, instruction: String): return Immediate(value, 5, line, instruction)]]}
 
+func show_error(error_message: String):
+	if not %"Error Bottom Tab".visible:
+		%"Error Bottom Tab".visible = true
+		%"Error Bottom Tab".get_child(0).get_child(0).text = error_message
+
+func hide_error():
+	%"Error Bottom Tab".visible = false
 
 func _ready():
 	syntax_highlighter = highlighter
@@ -147,6 +158,7 @@ func _ready():
 	#return 1
 
 func _on_text_changed() -> void:
+	hide_error()
 	definitions.clear()
 	labels.clear()
 	var available_pages = []
@@ -170,8 +182,9 @@ func _on_text_changed() -> void:
 			if not prog_line.substr(1).contains(" "):
 				if prog_line in labels:
 					set_line_background_color(line, Color.hex(0xC5696966))
+					show_error("Error: duplicate label on lines %s and %s" % [line, labels[prog_line]])
 				else:
-					labels.append(prog_line)
+					labels[prog_line] = line
 			continue
 		
 		if prog_line.begins_with(">"):
@@ -179,6 +192,7 @@ func _on_text_changed() -> void:
 				var temp_index = available_pages.find(prog_line.substr(1).to_int())
 				if temp_index == -1:
 					set_line_background_color(line, Color.hex(0xC5696966))
+					show_error("Error: duplicate page number on line %s" % line)
 				else:
 					available_pages.remove_at(temp_index)
 				continue
@@ -195,7 +209,6 @@ func _on_text_changed() -> void:
 			
 		if split_dict[0][0] == "define":
 			if split_dict.size() != 3:
-				set_line_background_color(line, Color.hex(0xC5696966))
 				continue
 			if split_dict[2][0].begins_with("0b"):
 				if split_dict[2][0].length() > 2:
@@ -215,7 +228,9 @@ func _on_text_changed() -> void:
 			elif split_dict[2][0] in REGISTERS or split_dict[2][0] in CONDITIONS:
 				definitions[split_dict[1][0]] = split_dict[2][0]
 			continue
-		
+			
+	var valid_line = 0
+	
 	for line in get_line_count():
 		var line_number = "%04d" % [line]
 		set_line_gutter_text(line, 0, line_number)
@@ -240,13 +255,15 @@ func _on_text_changed() -> void:
 		if in_page_line > 32:
 			if available_pages.size() == 0:
 				set_line_background_color(line, Color.hex(0xC5696966))
+				show_error("Error: with currently declared pages there are no more pages left to fit instruction on line %s please restructure the program" % line)
 			else:
 				available_pages.pop_at(0)
 				in_page_line = 0
 		
 		if prog_line.begins_with("."):
-			if prog_line.substr(1).contains(" "):
+			if prog_line.substr(1).contains(" ") or prog_line.substr(1).contains("\t"):
 				set_line_background_color(line, Color.hex(0xC5696966))
+				show_error("Error: label name cannot contain spaces or tabs on line %s" % line)
 			continue
 		
 		var split_str = prog_line.split(" ")
@@ -262,27 +279,34 @@ func _on_text_changed() -> void:
 		if split_dict[0][0] == "define":
 			if split_dict.size() != 3:
 				set_line_background_color(line, Color.hex(0xC5696966))
+				show_error("Error: definition missing parameters on line %s" % line)
 				continue
 			if split_dict[2][0].begins_with("0b"):
 				if split_dict[2][0].length() <= 2:
 					set_line_background_color(line, Color.hex(0xC5696966))
+					show_error("Error: definition with empty binary literal on line %s" % line)
 				for character in split_dict[2][0].substr(2):
 					if character not in ["0", "1"]:
 						set_line_background_color(line, Color.hex(0xC5696966))
+						show_error("Error: definition with invalid binary literal on line %s" % line)
 						break
 				#definitions.append(split_dict[1][0]) # = split_dict[2][0].bin_to_int()
 			elif split_dict[2][0].begins_with("0x"):
 				if split_dict[2][0].length() <= 2:
 					set_line_background_color(line, Color.hex(0xC5696966))
+					show_error("Error: definition with empty hex literal on line %s" % line)
 				if not split_dict[2][0].is_valid_hex_number(true):
 					set_line_background_color(line, Color.hex(0xC5696966))
+					show_error("Error: definition with invalid hex literal on line %s" % line)
 				#definitions.append(split_dict[1][0]) # = split_dict[2][0].hex_to_int()
 			elif split_dict[2][0].is_valid_int():
 				if split_dict[2][0].length() > 0 and split_dict[2][0][0] == "+":
 					set_line_background_color(line, Color.hex(0xC5696966))
+					show_error("Error: definition with invalid decimal literal on line %s" % line)
 				#definitions.append(split_dict[1][0]) # = split_dict[2][0].to_int()
 			elif split_dict[2][0] not in REGISTERS and split_dict[2][0] not in CONDITIONS:
 				set_line_background_color(line, Color.hex(0xC5696966))
+				show_error("Error: definition with invalid value on line %s" % line)
 			continue
 				
 		if split_dict[0][0] in INSTRUCTIONS:
@@ -290,6 +314,10 @@ func _on_text_changed() -> void:
 			#set_line_gutter_text(line, 0, line_number)
 			#set_line_gutter_item_color(line, 0, Color.hex(0x919191ff))
 			in_page_line += 1
+			valid_line += 1
+			if valid_line >= 4096:
+				set_line_background_color(line, Color.hex(0xC5696966))
+				show_error("Error: program is larger than 4096 instructions, please shorten the program")
 			
 			var parameter_count = split_dict.size() - 1
 			if parameter_count in INSTRUCTIONS[split_dict[0][0]][0]:
@@ -300,13 +328,34 @@ func _on_text_changed() -> void:
 					var func_output: String = INSTRUCTIONS[split_dict[0][0]][1 + instruction_type][parameter].call(split_str[index], line, split_str[0])
 					
 					if func_output.substr(0, 5) == "Error":
-						print(split_str)
-						print(func_output)
 						set_line_background_color(line, Color.hex(0xC5696966))
+						show_error("Error: encountered an error parsing instruction on line %s: %s" % [line, func_output])
 						break
 			else:
 				set_line_background_color(line, Color.hex(0xC5696966))
+				show_error("Error: unrecognized parameter count for instruction on line %s" % line)
 				continue
 		else:
 			set_line_background_color(line, Color.hex(0xC5696966))
+			show_error("Error: unrecognized instruction on line %s" % line)
 			continue
+
+
+var previous_caret_line = null
+
+func _on_caret_changed() -> void:
+	var current_caret_line = get_caret_line()
+	if previous_caret_line != null:
+		if current_caret_line == previous_caret_line + 1:
+			var current_line = get_line(previous_caret_line)
+			print(current_line)
+			if current_line.begins_with("\t") or current_line.begins_with(" "):
+				var line_prefix = ""
+				for character in current_line:
+					if character in [" ", "\t"]:
+						line_prefix += character
+					else:
+						break
+				set_line(current_caret_line, line_prefix)
+				set_caret_column(line_prefix.length())
+	previous_caret_line = current_caret_line

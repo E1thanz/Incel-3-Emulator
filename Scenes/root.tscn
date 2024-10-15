@@ -213,7 +213,7 @@ grow_vertical = 2
 size_flags_horizontal = 4
 theme_override_colors/font_color = Color(0.372549, 0.701961, 0.960784, 1)
 theme_override_fonts/font = ExtResource("2_x3dv1")
-text = "VERSION 1.1"
+text = "VERSION 1.2"
 
 [node name="Edit View Rect" type="ColorRect" parent="MarginContainer/HBoxContainer/VBoxContainer"]
 unique_name_in_owner = true
@@ -425,10 +425,35 @@ keep_pressed_outside = true
 text = "No"
 metadata/_edit_use_anchors_ = true
 
+[node name="Error Bottom Tab" type="ColorRect" parent="MarginContainer/HBoxContainer/VBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 140)
+layout_mode = 2
+color = Color(0.176471, 0.176471, 0.176471, 1)
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/HBoxContainer/VBoxContainer/Error Bottom Tab"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_right = 5
+
+[node name="Label" type="Label" parent="MarginContainer/HBoxContainer/VBoxContainer/Error Bottom Tab/MarginContainer"]
+custom_minimum_size = Vector2(0, 60)
+layout_mode = 2
+size_flags_vertical = 1
+theme_override_colors/font_color = Color(0.772549, 0.411765, 0.411765, 1)
+theme_override_fonts/font = ExtResource("2_x3dv1")
+autowrap_mode = 3
+
 [connection signal="pressed" from="MarginContainer/HBoxContainer/VBoxContainer/top bar/MarginContainer/ColorRect/MarginContainer/HBoxContainer/Button5" to="MarginContainer/HBoxContainer/VBoxContainer/top bar" method="create_new_file" binds= ["New File"]]
 [connection signal="pressed" from="MarginContainer/HBoxContainer/VBoxContainer/top bar/MarginContainer/ColorRect/MarginContainer/HBoxContainer/Button" to="MarginContainer/HBoxContainer/VBoxContainer/top bar" method="_open_file_press"]
 [connection signal="pressed" from="MarginContainer/HBoxContainer/VBoxContainer/top bar/MarginContainer/ColorRect/MarginContainer/HBoxContainer/Button2" to="MarginContainer/HBoxContainer/VBoxContainer/top bar" method="_save_file_press"]
 [connection signal="button_up" from="MarginContainer/HBoxContainer/VBoxContainer/top bar/MarginContainer/ColorRect/MarginContainer/HBoxContainer/Button4" to="MarginContainer/HBoxContainer/VBoxContainer/top bar" method="_compile_press"]
+[connection signal="caret_changed" from="MarginContainer/HBoxContainer/VBoxContainer/Edit View Rect/VBoxContainer/MarginContainer/Program View" to="MarginContainer/HBoxContainer/VBoxContainer/Edit View Rect/VBoxContainer/MarginContainer/Program View" method="_on_caret_changed"]
 [connection signal="text_changed" from="MarginContainer/HBoxContainer/VBoxContainer/Edit View Rect/VBoxContainer/MarginContainer/Program View" to="MarginContainer/HBoxContainer/VBoxContainer/top bar" method="_on_program_view_text_changed"]
 [connection signal="text_changed" from="MarginContainer/HBoxContainer/VBoxContainer/Edit View Rect/VBoxContainer/MarginContainer/Program View" to="MarginContainer/HBoxContainer/VBoxContainer/Edit View Rect/VBoxContainer/MarginContainer/Program View" method="_on_text_changed"]
 [connection signal="text_set" from="MarginContainer/HBoxContainer/VBoxContainer/Edit View Rect/VBoxContainer/MarginContainer/Program View" to="MarginContainer/HBoxContainer/VBoxContainer/Edit View Rect/VBoxContainer/MarginContainer/Program View" method="_on_text_changed"]
