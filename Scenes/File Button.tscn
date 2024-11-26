@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://bpq0y0jqwra4w"]
+[gd_scene load_steps=9 format=3 uid="uid://bpq0y0jqwra4w"]
 
 [ext_resource type="FontFile" uid="uid://4ujtvc6xa177" path="res://font/Little_Malio_8-Bit.otf" id="1_bam6v"]
 [ext_resource type="Script" path="res://scripts/File Panel.gd" id="1_iuuf5"]
@@ -9,6 +9,8 @@ corner_radius_top_left = 15
 corner_radius_top_right = 15
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_3tp61"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_t1e0w"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_eefs7"]
 bg_color = Color(0.152941, 0.152941, 0.152941, 1)
@@ -44,9 +46,11 @@ text = "SaveFile"
 [node name="Button" type="Button" parent="HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 8
+theme_override_colors/font_disabled_color = Color(0.501407, 0.501406, 0.501406, 1)
 theme_override_colors/font_color = Color(0.372549, 0.701961, 0.960784, 1)
 theme_override_fonts/font = ExtResource("1_bam6v")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_3tp61")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_t1e0w")
 theme_override_styles/hover = SubResource("StyleBoxFlat_eefs7")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_warff")
 theme_override_styles/normal = SubResource("StyleBoxFlat_cysy3")

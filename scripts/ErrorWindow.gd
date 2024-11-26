@@ -22,6 +22,7 @@ func _mouse_input_event(event):
 	elif event is InputEventMouseMotion:
 		if dragging:
 			position = get_parent().get_local_mouse_position() - relativePosition
+			position = position.max(Vector2(-965, -64)).min(Vector2(1920,1080) + Vector2(-965, -64) - size)
 
 func _mouse_entered():
 	mouse_in = true

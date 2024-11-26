@@ -1,0 +1,27 @@
+[gd_scene load_steps=3 format=3 uid="uid://dou7ftycb0l0b"]
+
+[ext_resource type="FontFile" uid="uid://4ujtvc6xa177" path="res://font/Little_Malio_8-Bit.otf" id="1_epxgi"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2t7lf"]
+bg_color = Color(0.133196, 0.133196, 0.133196, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[node name="Button" type="Panel"]
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_2t7lf")
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("1_epxgi")
+theme_override_font_sizes/font_size = 28
+text = "A"
+horizontal_alignment = 1
+vertical_alignment = 1

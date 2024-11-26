@@ -25,12 +25,16 @@ var fileButtons = []
 const maximum_files = 5
 
 func _ready():
-	DisplayServer.window_set_min_size(Vector2i(1920, 1080))
+	#DisplayServer.window_set_min_size(Vector2i(1920, 1080))
 	%"Program View".add_gutter(0)
 	%"Program View".set_gutter_width(0, 60)
 	%"Program View".add_gutter(1)
-	%"Program View".set_gutter_width(1, 35)
-	%"Program View".set_gutter_type(1, TextEdit.GUTTER_TYPE_ICON)
+	%"Program View".set_gutter_width(1, 40)
+	%"Program View".add_gutter(2)
+	%"Program View".set_gutter_width(2, 35)
+	%"Program View".set_gutter_clickable(2, true)
+	%"Program View".set_gutter_type(2, TextEdit.GUTTER_TYPE_ICON)
+	%Emulator._Reset_Pressed()
 	
 	get_tree().set_auto_accept_quit(false)
 	
@@ -63,7 +67,7 @@ func _ready():
 	%"Edit View Rect".color = Color.hex(0x2d2d2dff)
 	activeButton.set_meta("Changed", false)
 		
-func create_new_file(name):
+func create_new_file(file_name):
 	if fileButtons.size() == maximum_files:
 		return
 	
@@ -79,7 +83,7 @@ func create_new_file(name):
 	newFileButton.selected = true
 	%"File Bar".add_child(newFileButton)
 	newFileButton.set_meta("FilePath", "")
-	newFileButton.get_child(0).get_child(1).text = name
+	newFileButton.get_child(0).get_child(1).text = file_name
 	activeButton = newFileButton
 	%"Program View".text = ""
 	%"Edit View Rect".color = Color.hex(0x2d2d2dff)
@@ -127,11 +131,7 @@ func _open_file_press():
 
 func _save_file_press():
 	for button in fileButtons:
-		if button == activeButton:
-			if save_file(button):
-				%"Edit View Rect".color = Color.hex(0x2d2d2dff)
-		else:
-			save_file(button)
+		save_file(button)
 	
 func save_file(button) -> bool:
 	if not button.get_meta("Changed"):
@@ -151,6 +151,9 @@ func save_file(button) -> bool:
 		
 		button.set_meta("FilePath", processed_results)
 	
+	if button == activeButton:
+		%"Edit View Rect".color = Color.hex(0x2d2d2dff)
+	
 	var split_path = Array(button.get_meta("FilePath").split("\\")).pop_back()
 	button.get_child(0).get_child(1).text = split_path
 	var file = FileAccess.open(button.get_meta("FilePath"), FileAccess.WRITE)
@@ -163,7 +166,7 @@ func save_file(button) -> bool:
 	return true
 
 func _compile_press():
-	if activeButton.get_meta("FilePath").is_empty():
+	if activeButton.get_meta("FilePath").is_empty() or activeButton.get_meta("Changed"):
 		if not save_file(activeButton):
 			return
 	
@@ -198,6 +201,8 @@ func _on_program_view_text_changed():
 		activeButton.set_meta("Changed", true)
 		
 func _change_selected_file(clickedButton):
+	if clickedButton == activeButton:
+		return
 	activeButton.set_meta("File", %"Program View".text)
 	activeButton.selected = false
 	activeButton.update_selection()
@@ -237,9 +242,14 @@ func _close_file(clickedButton):
 	activeButton.set_meta("Changed", false)
 
 func close():
-	var save_file = FileAccess.open("user://fileBar.txt", FileAccess.WRITE)
+	var _save_file = FileAccess.open("user://fileBar.txt", FileAccess.WRITE)
 	for button in fileButtons:
 		var path = button.get_meta("FilePath")
 		if path != "":
-			save_file.store_line(path)
+			_save_file.store_line(path)
+	%Emulator.update_settings()
+	%Emulator.is_running = false
+	if %Emulator.thread.is_alive():
+		%Emulator.semaphore.post()
+		%Emulator.thread.wait_to_finish()
 	get_tree().quit() # default behavior

@@ -42,7 +42,7 @@ func Immediate(value: String, bits: int, line: int, instruction: String) -> Stri
 			#return "%0*d" % [bits, binaryOutput]
 			return ""
 		return "Error: hex form immediate with non hex digits given on line %s for instruction %s" % [line, instruction]
-	if value.is_valid_int() and value[1] != "+":
+	if value.is_valid_int() and value[0] != "+":
 		var int_value = value.to_int()
 		var binaryOutput = ""
 		if int_value < 0:
@@ -209,7 +209,7 @@ func _get_line_syntax_highlighting(line: int) -> Dictionary:
 			var instruction_type = INSTRUCTIONS[split_dict[0][0]][0].find(parameter_count)
 			for parameter in parameter_count:
 				var index = parameter + 1
-				var func_output: String = INSTRUCTIONS[split_dict[0][0]][1 + instruction_type][parameter].call(split_str[index], line, split_str[0])
+				#var func_output: String = INSTRUCTIONS[split_dict[0][0]][1 + instruction_type][parameter].call(split_str[index], line, split_str[0])
 				
 				if split_dict[index][0] in REGISTERS:
 					color_map[color_offset + split_dict[index][1]] = { "color": Color.hex(0x9CDCFEFF) }

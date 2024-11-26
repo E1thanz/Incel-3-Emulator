@@ -1,0 +1,1629 @@
+[gd_scene load_steps=35 format=3 uid="uid://c5g8h6vg3v1qy"]
+
+[ext_resource type="Script" path="res://Scenes/screen.gd" id="1_bwyhd"]
+[ext_resource type="Script" path="res://scripts/file management.gd" id="1_e1rbs"]
+[ext_resource type="Script" path="res://scripts/Emulator.gd" id="1_u7o7p"]
+[ext_resource type="FontFile" uid="uid://4ujtvc6xa177" path="res://font/Little_Malio_8-Bit.otf" id="2_x3dv1"]
+[ext_resource type="Script" path="res://scripts/ErrorWindow.gd" id="3_4ac6n"]
+[ext_resource type="Script" path="res://scripts/Program View.gd" id="3_rfrod"]
+[ext_resource type="Script" path="res://scripts/Keyboard Shortcut Binder.gd" id="4_5nq07"]
+[ext_resource type="Script" path="res://scripts/InputWindow.gd" id="4_st3vd"]
+[ext_resource type="Script" path="res://Scenes/Screen Manager.gd" id="5_2q0yt"]
+[ext_resource type="Script" path="res://scripts/Port Manager.gd" id="5_8dy4r"]
+[ext_resource type="Script" path="res://scripts/SaveWindow.gd" id="5_mhw0u"]
+[ext_resource type="Script" path="res://fps.gd" id="9_ksws7"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_h23tr"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_uc4j2"]
+bg_color = Color(0.237539, 0.237539, 0.237539, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ye7id"]
+bg_color = Color(0.2, 0.2, 0.2, 1)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_tuy0k"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_alj6n"]
+bg_color = Color(0.2, 0.2, 0.2, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_v1oai"]
+bg_color = Color(0.372549, 0.701961, 0.960784, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_kk6mc"]
+bg_color = Color(1, 1, 1, 0)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_rdypq"]
+bg_color = Color(0.2, 0.2, 0.2, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vsrjp"]
+bg_color = Color(0.372549, 0.701961, 0.960784, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_i0ee1"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7uwgn"]
+bg_color = Color(0.219608, 0.219608, 0.219608, 1)
+
+[sub_resource type="InputEventKey" id="InputEventKey_ud47b"]
+device = -1
+ctrl_pressed = true
+keycode = 78
+
+[sub_resource type="Shortcut" id="Shortcut_tt53e"]
+events = [SubResource("InputEventKey_ud47b")]
+
+[sub_resource type="InputEventKey" id="InputEventKey_ddncu"]
+device = -1
+ctrl_pressed = true
+keycode = 79
+
+[sub_resource type="Shortcut" id="Shortcut_bj7dq"]
+events = [SubResource("InputEventKey_ddncu")]
+
+[sub_resource type="InputEventKey" id="InputEventKey_r6o37"]
+device = -1
+ctrl_pressed = true
+keycode = 83
+
+[sub_resource type="Shortcut" id="Shortcut_qrg7t"]
+events = [SubResource("InputEventKey_r6o37")]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_i3vly"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_6rgrh"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gkm7j"]
+bg_color = Color(0.203922, 0.203922, 0.203922, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_evtyq"]
+bg_color = Color(0.152941, 0.152941, 0.152941, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_p1j0o"]
+bg_color = Color(0.152941, 0.152941, 0.152941, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+
+[node name="ROOT" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ColorRect" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.152941, 0.152941, 0.152941, 1)
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 10
+
+[node name="Emulator" type="ColorRect" parent="MarginContainer/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+color = Color(0.219608, 0.219608, 0.219608, 1)
+script = ExtResource("1_u7o7p")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/HBoxContainer/Emulator"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 0
+
+[node name="MarginContainer2" type="MarginContainer" parent="MarginContainer/HBoxContainer/Emulator/HBoxContainer"]
+custom_minimum_size = Vector2(620, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/margin_left = 2
+theme_override_constants/margin_top = 2
+theme_override_constants/margin_right = 2
+theme_override_constants/margin_bottom = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/HBoxContainer/Emulator/HBoxContainer/MarginContainer2"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 3
+
+[node name="ColorRect" type="ColorRect" parent="MarginContainer/HBoxContainer/Emulator/HBoxContainer/MarginContainer2/VBoxContainer"]
+custom_minimum_size = Vector2(0, 120)
+layout_mode = 2
+color = Color(0.176471, 0.176471, 0.176471, 1)
+
+[node name="NumDisplay" type="RichTextLabel" parent="MarginContainer/HBoxContainer/Emulator/HBoxContainer/MarginContainer2/VBoxContainer/ColorRect"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(200, 90)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -100.0
+offset_top = -45.0
+offset_right = 100.0
+offset_bottom = 45.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_vertical = 4
+theme_override_fonts/normal_font = ExtResource("2_x3dv1")
+theme_override_font_sizes/normal_font_size = 42
+bbcode_enabled = true
+text = "[center]000[/center]"
+
+[node name="Screen" type="ColorRect" parent="MarginContainer/HBoxContainer/Emulator/HBoxContainer/MarginContainer2/VBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 616)
+layout_mode = 2
+color = Color(0.176471, 0.176471, 0.176471, 1)
+script = ExtResource("1_bwyhd")
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/HBoxContainer/Emulator/HBoxContainer/MarginContainer2/VBoxContainer/Screen"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="GridContainer" type="GridContainer" parent="MarginContainer/HBoxContainer/Emulator/HBoxContainer/MarginContainer2/VBoxContainer/Screen/MarginContainer"]
+layout_mode = 2
+theme_override_constants/h_separation = 0
+theme_override_constants/v_separation = 0
+
+[node name="ColorRect3" type="ColorRect" parent="MarginContainer/HBoxContainer/Emulator/HBoxContainer/MarginContainer2/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+color = Color(0.176471, 0.176471, 0.176471, 1)
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/HBoxContainer/Emulator/HBoxContainer/MarginContainer2/VBoxContainer/ColorRect3"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 60
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 60
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/HBoxContainer/Emulator/HBoxContainer/MarginContainer2/VBoxContainer/ColorRect3/MarginContainer"]
+layout_mode = 2
+script = ExtResource("4_5nq07")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/HBoxContainer/Emulator/HBoxContainer/MarginContainer2/VBoxContainer/ColorRect3/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="MarginContainer/HBoxContainer/Emulator/HBoxContainer/MarginContainer2/VBoxContainer/ColorRect3/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Control" type="Control" parent="MarginContainer/HBoxContainer/Emulator/HBoxContainer/MarginContainer2/VBoxContainer/ColorRect3/MarginContainer/VBoxContainer/HBoxContainer2"]
+custom_minimum_size = Vector2(27, 0)
+layout_mode = 2
+
+[node name="Control2" type="Control" parent="MarginContainer/HBoxContainer/Emulator/HBoxContainer/MarginContainer2/VBoxContainer/ColorRect3/MarginContainer/VBoxContainer/HBoxContainer2"]
+custom_minimum_size = Vector2(27, 0)
+layout_mode = 2
+
+[node name="HBoxContainer3" type="HBoxContainer" parent="MarginContainer/HBoxContainer/Emulator/HBoxContainer/MarginContainer2/VBoxContainer/ColorRect3/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Control" type="Control" parent="MarginContainer/HBoxContainer/Emulator/HBoxContainer/MarginContainer2/VBoxContainer/ColorRect3/MarginContainer/VBoxContainer/HBoxContainer3"]
+custom_minimum_size = Vector2(54, 0)
+layout_mode = 2
+
+[node name="Control2" type="Control" parent="MarginContainer/HBoxContainer/Emulator/HBoxContainer/MarginContainer2/VBoxContainer/ColorRect3/MarginContainer/VBoxContainer/HBoxContainer3"]
+custom_minimum_size = Vector2(108, 0)
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/HBoxContainer/Emulator/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/margin_left = 2
+theme_override_constants/margin_top = 2
+theme_override_constants/margin_right = 2
+theme_override_constants/margin_bottom = 2
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="MarginContainer/HBoxContainer/Emulator/HBoxContainer/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 3
+
+[node name="ColorRect" type="ColorRect" parent="MarginContainer/HBoxContainer/Emulator/HBoxContainer/MarginContainer/VBoxContainer2"]
+custom_minimum_size = Vector2(0, 230)
+layout_mode = 2
+color = Color(0.176471, 0.176471, 0.176471, 1)
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/HBoxContainer/Emulator/HBoxContainer/MarginContainer/VBoxContainer2/ColorRect"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/HBoxContainer/Emulator/HBoxContainer/MarginContainer/VBoxContainer2/ColorRect/MarginContainer"]
+layout_mode = 2
+
+[node name="PC Label" type="RichTextLabel" parent="MarginContainer/HBoxContainer/Emulator/HBoxContainer/MarginContainer/VBoxContainer2/ColorRect/MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 35)
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_fonts/normal_font = ExtResource("2_x3dv1")
+bbcode_enabled = true
+text = "[center]PC = 0000[/center]"
+
+[node name="Start Stop Button" type="Button" parent="MarginContainer/HBoxContainer/Emulator/HBoxContainer/MarginContainer/VBoxContainer2/ColorRect/MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_colors/font_focus_color = Color(0.372549, 0.701961, 0.960784, 1)
+theme_override_colors/font_color = Color(0.372549, 0.701961, 0.960784, 1)
+theme_override_fonts/font = ExtResource("2_x3dv1")
+theme_override_font_sizes/font_size = 16
+theme_override_styles/focus = SubResource("StyleBoxEmpty_h23tr")
+theme_override_styles/hover = SubResource("StyleBoxFlat_uc4j2")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_ye7id")
+theme_override_styles/normal = SubResource("StyleBoxFlat_ye7id")
+text = "Start"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/HBoxContainer/Emulator/HBoxContainer/MarginContainer/VBoxContainer2/ColorRect/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 4
+
+[node name="Step Button" type="Button" parent="MarginContainer/HBoxContainer/Emulator/HBoxContainer/MarginContainer/VBoxContainer2/ColorRect/MarginContainer/VBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+theme_override_colors/font_focus_color = Color(0.372549, 0.701961, 0.960784, 1)
+theme_override_colors/font_color = Color(0.372549, 0.701961, 0.960784, 1)
+theme_override_fonts/font = ExtResource("2_x3dv1")
+theme_override_font_sizes/font_size = 16
+theme_override_styles/focus = SubResource("StyleBoxEmpty_h23tr")
+theme_override_styles/hover = SubResource("StyleBoxFlat_uc4j2")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_ye7id")
+theme_override_styles/normal = SubResource("StyleBoxFlat_ye7id")
+text = "Step
+"
+
+[node name="Reset Button" type="Button" parent="MarginContainer/HBoxContainer/Emulator/HBoxContainer/MarginContainer/VBoxContainer2/ColorRect/MarginContainer/VBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+theme_override_colors/font_focus_color = Color(0.372549, 0.701961, 0.960784, 1)
+theme_override_colors/font_color = Color(0.372549, 0.701961, 0.960784, 1)
+theme_override_fonts/font = ExtResource("2_x3dv1")
+theme_override_font_sizes/font_size = 16
+theme_override_styles/focus = SubResource("StyleBoxEmpty_h23tr")
+theme_override_styles/hover = SubResource("StyleBoxFlat_uc4j2")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_ye7id")
+theme_override_styles/normal = SubResource("StyleBoxFlat_ye7id")
+text = "Reset
+"
+
+[node name="HBoxContainer2" type="Control" parent="MarginContainer/HBoxContainer/Emulator/HBoxContainer/MarginContainer/VBoxContainer2/ColorRect/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+size_flags_vertical = 4
+
+[node name="SpeedSlider" type="HSlider" parent="MarginContainer/HBoxContainer/Emulator/HBoxContainer/MarginContainer/VBoxContainer2/ColorRect/MarginContainer/VBoxContainer/HBoxContainer2"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_top = -8.0
+offset_right = -87.0
+offset_bottom = 8.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+min_value = 1.0
+max_value = 10000.0
+value = 1.0
+exp_edit = true
+
+[node name="SpeedInput" type="SpinBox" parent="MarginContainer/HBoxContainer/Emulator/HBoxContainer/MarginContainer/VBoxContainer2/ColorRect/MarginContainer/VBoxContainer/HBoxContainer2"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -83.0625
+offset_top = -25.0
+offset_bottom = 25.0
+grow_horizontal = 0
+grow_vertical = 2
+size_flags_horizontal = 8
+max_value = 10000.0
+
+[node name="ColorRect5" type="ColorRect" parent="MarginContainer/HBoxContainer/Emulator/HBoxContainer/MarginContainer/VBoxContainer2"]
+custom_minimum_size = Vector2(0, 80)
+layout_mode = 2
+color = Color(0.176471, 0.176471, 0.176471, 1)
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/HBoxContainer/Emulator/HBoxContainer/MarginContainer/VBoxContainer2/ColorRect5"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 0
+
+[node name="RichTextLabel" type="RichTextLabel" parent="MarginContainer/HBoxContainer/Emulator/HBoxContainer/MarginContainer/VBoxContainer2/ColorRect5/VBoxContainer"]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+theme_override_fonts/normal_font = ExtResource("2_x3dv1")
+theme_override_font_sizes/normal_font_size = 12
+bbcode_enabled = true
+text = "[center]Flags[/center]"
+
+[node name="Flag Values" type="RichTextLabel" parent="MarginContainer/HBoxContainer/Emulator/HBoxContainer/MarginContainer/VBoxContainer2/ColorRect5/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_fonts/normal_font = ExtResource("2_x3dv1")
+theme_override_font_sizes/normal_font_size = 10
+bbcode_enabled = true
+text = "[center]Overflow: false | Carry out: false
+MSB: false | Zero: false [/center]"
+
+[node name="ColorRect2" type="ColorRect" parent="MarginContainer/HBoxContainer/Emulator/HBoxContainer/MarginContainer/VBoxContainer2"]
+custom_minimum_size = Vector2(0, 80)
+layout_mode = 2
+color = Color(0.176471, 0.176471, 0.176471, 1)
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/HBoxContainer/Emulator/HBoxContainer/MarginContainer/VBoxContainer2/ColorRect2"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 0
+
+[node name="RichTextLabel" type="RichTextLabel" parent="MarginContainer/HBoxContainer/Emulator/HBoxContainer/MarginContainer/VBoxContainer2/ColorRect2/VBoxContainer"]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+theme_override_fonts/normal_font = ExtResource("2_x3dv1")
+theme_override_font_sizes/normal_font_size = 12
+bbcode_enabled = true
+text = "[center]Registers[/center]"
+
+[node name="Reg Values" type="RichTextLabel" parent="MarginContainer/HBoxContainer/Emulator/HBoxContainer/MarginContainer/VBoxContainer2/ColorRect2/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_fonts/normal_font = ExtResource("2_x3dv1")
+theme_override_font_sizes/normal_font_size = 10
+bbcode_enabled = true
+text = "[center]R0: 000 | R1: 000 | R2: 000 | R3: 000
+R4: 000 | R5: 000 | R6: 000 | R7: 000[/center]"
+
+[node name="ColorRect3" type="ColorRect" parent="MarginContainer/HBoxContainer/Emulator/HBoxContainer/MarginContainer/VBoxContainer2"]
+layout_mode = 2
+size_flags_vertical = 3
+color = Color(0.176471, 0.176471, 0.176471, 1)
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/HBoxContainer/Emulator/HBoxContainer/MarginContainer/VBoxContainer2/ColorRect3"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="RichTextLabel2" type="RichTextLabel" parent="MarginContainer/HBoxContainer/Emulator/HBoxContainer/MarginContainer/VBoxContainer2/ColorRect3/VBoxContainer"]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+theme_override_fonts/normal_font = ExtResource("2_x3dv1")
+theme_override_font_sizes/normal_font_size = 12
+bbcode_enabled = true
+text = "[center]RAM[/center]"
+
+[node name="Ram Values" type="RichTextLabel" parent="MarginContainer/HBoxContainer/Emulator/HBoxContainer/MarginContainer/VBoxContainer2/ColorRect3/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_fonts/normal_font = ExtResource("2_x3dv1")
+theme_override_font_sizes/normal_font_size = 10
+bbcode_enabled = true
+text = "[center]  0:000 |   1:000 |   2:000 |   3:000 
+...
+252:000 | 253:000 | 254:000 | 255:000[/center]"
+
+[node name="ColorRect4" type="ColorRect" parent="MarginContainer/HBoxContainer/Emulator/HBoxContainer/MarginContainer/VBoxContainer2"]
+custom_minimum_size = Vector2(0, 170)
+layout_mode = 2
+color = Color(0.176471, 0.176471, 0.176471, 1)
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/HBoxContainer/Emulator/HBoxContainer/MarginContainer/VBoxContainer2/ColorRect4"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/HBoxContainer/Emulator/HBoxContainer/MarginContainer/VBoxContainer2/ColorRect4/MarginContainer"]
+layout_mode = 2
+
+[node name="EditInputs" type="Button" parent="MarginContainer/HBoxContainer/Emulator/HBoxContainer/MarginContainer/VBoxContainer2/ColorRect4/MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_colors/font_focus_color = Color(0.372549, 0.701961, 0.960784, 1)
+theme_override_colors/font_color = Color(0.372549, 0.701961, 0.960784, 1)
+theme_override_fonts/font = ExtResource("2_x3dv1")
+theme_override_font_sizes/font_size = 16
+theme_override_styles/focus = SubResource("StyleBoxEmpty_h23tr")
+theme_override_styles/hover = SubResource("StyleBoxFlat_uc4j2")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_ye7id")
+theme_override_styles/normal = SubResource("StyleBoxFlat_ye7id")
+text = "Edit Inputs"
+
+[node name="Screen Wrapping Check Button" type="CheckButton" parent="MarginContainer/HBoxContainer/Emulator/HBoxContainer/MarginContainer/VBoxContainer2/ColorRect4/MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/font_focus_color = Color(1, 1, 1, 1)
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("2_x3dv1")
+theme_override_font_sizes/font_size = 10
+theme_override_styles/focus = SubResource("StyleBoxEmpty_tuy0k")
+text = "Screen Coordinates Wrapping"
+
+[node name="Follow Check Button" type="CheckButton" parent="MarginContainer/HBoxContainer/Emulator/HBoxContainer/MarginContainer/VBoxContainer2/ColorRect4/MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/font_focus_color = Color(1, 1, 1, 1)
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("2_x3dv1")
+theme_override_font_sizes/font_size = 10
+theme_override_styles/focus = SubResource("StyleBoxEmpty_tuy0k")
+text = "Follow Program When Running"
+
+[node name="SignedNumberToggle" type="CheckButton" parent="MarginContainer/HBoxContainer/Emulator/HBoxContainer/MarginContainer/VBoxContainer2/ColorRect4/MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_pressed_color = Color(1, 1, 1, 1)
+theme_override_colors/font_focus_color = Color(1, 1, 1, 1)
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("2_x3dv1")
+theme_override_font_sizes/font_size = 10
+theme_override_styles/focus = SubResource("StyleBoxEmpty_tuy0k")
+text = "Signed Number Display Mode"
+
+[node name="Input Window" type="Panel" parent="MarginContainer/HBoxContainer/Emulator"]
+visible = false
+top_level = true
+z_index = 1
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -350.0
+offset_top = -300.0
+offset_right = 350.0
+offset_bottom = 300.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_alj6n")
+script = ExtResource("4_st3vd")
+
+[node name="Panel" type="Panel" parent="MarginContainer/HBoxContainer/Emulator/Input Window"]
+custom_minimum_size = Vector2(0, 31)
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+grow_horizontal = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_v1oai")
+
+[node name="Button" type="Button" parent="MarginContainer/HBoxContainer/Emulator/Input Window/Panel"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -34.5
+offset_right = -2.5
+offset_bottom = 31.0
+grow_horizontal = 0
+theme_override_colors/font_hover_color = Color(0.666667, 0.666667, 0.666667, 1)
+theme_override_colors/font_pressed_color = Color(1, 0, 0, 1)
+theme_override_colors/font_focus_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("2_x3dv1")
+theme_override_font_sizes/font_size = 11
+theme_override_styles/focus = SubResource("StyleBoxFlat_kk6mc")
+theme_override_styles/hover = SubResource("StyleBoxFlat_kk6mc")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_kk6mc")
+theme_override_styles/normal = SubResource("StyleBoxFlat_kk6mc")
+keep_pressed_outside = true
+text = "X"
+
+[node name="Label" type="Label" parent="MarginContainer/HBoxContainer/Emulator/Input Window/Panel"]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 7.0
+offset_top = -14.5
+offset_right = 173.0
+offset_bottom = 14.5
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("2_x3dv1")
+theme_override_font_sizes/font_size = 14
+text = "Input Manager"
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/HBoxContainer/Emulator/Input Window"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 31.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer/HBoxContainer/Emulator/Input Window/MarginContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 3
+
+[node name="PortManager" type="VBoxContainer" parent="MarginContainer/HBoxContainer/Emulator/Input Window/MarginContainer/ScrollContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(676, 0)
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 5
+script = ExtResource("5_8dy4r")
+
+[node name="ColorRect2" type="ColorRect" parent="MarginContainer/HBoxContainer/Emulator/Input Window/MarginContainer/ScrollContainer/PortManager"]
+custom_minimum_size = Vector2(0, 80)
+layout_mode = 2
+size_flags_horizontal = 3
+color = Color(0.219608, 0.219608, 0.219608, 1)
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/HBoxContainer/Emulator/Input Window/MarginContainer/ScrollContainer/PortManager/ColorRect2"]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_top = -25.0
+offset_right = 199.0
+offset_bottom = 25.0
+grow_vertical = 2
+
+[node name="Control" type="Control" parent="MarginContainer/HBoxContainer/Emulator/Input Window/MarginContainer/ScrollContainer/PortManager/ColorRect2/HBoxContainer"]
+custom_minimum_size = Vector2(20, 0)
+layout_mode = 2
+
+[node name="Step Button" type="Button" parent="MarginContainer/HBoxContainer/Emulator/Input Window/MarginContainer/ScrollContainer/PortManager/ColorRect2/HBoxContainer"]
+custom_minimum_size = Vector2(200, 50)
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_colors/font_focus_color = Color(0.372549, 0.701961, 0.960784, 1)
+theme_override_colors/font_color = Color(0.372549, 0.701961, 0.960784, 1)
+theme_override_fonts/font = ExtResource("2_x3dv1")
+theme_override_font_sizes/font_size = 16
+theme_override_styles/focus = SubResource("StyleBoxEmpty_h23tr")
+theme_override_styles/hover = SubResource("StyleBoxFlat_uc4j2")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_ye7id")
+theme_override_styles/normal = SubResource("StyleBoxFlat_rdypq")
+disabled = true
+text = "Screen X"
+
+[node name="Panel" type="Panel" parent="MarginContainer/HBoxContainer/Emulator/Input Window/MarginContainer/ScrollContainer/PortManager/ColorRect2" node_paths=PackedStringArray("check_list", "other_panel")]
+layout_mode = 0
+offset_left = 605.0
+offset_top = 28.0
+offset_right = 629.0
+offset_bottom = 52.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_vsrjp")
+script = ExtResource("5_2q0yt")
+check_list = [NodePath("../HBoxContainer2/CheckBox8"), NodePath("../HBoxContainer2/CheckBox7"), NodePath("../HBoxContainer2/CheckBox6"), NodePath("../HBoxContainer2/CheckBox5"), NodePath("../HBoxContainer2/CheckBox4"), NodePath("../HBoxContainer2/CheckBox3"), NodePath("../HBoxContainer2/CheckBox2"), NodePath("../HBoxContainer2/CheckBox")]
+other_panel = NodePath("../../ColorRect4/Panel")
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="MarginContainer/HBoxContainer/Emulator/Input Window/MarginContainer/ScrollContainer/PortManager/ColorRect2"]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+grow_horizontal = 0
+grow_vertical = 2
+
+[node name="OptionButton" type="OptionButton" parent="MarginContainer/HBoxContainer/Emulator/Input Window/MarginContainer/ScrollContainer/PortManager/ColorRect2/HBoxContainer2"]
+layout_mode = 2
+disabled = true
+selected = 0
+item_count = 1
+popup/item_0/text = "1"
+
+[node name="Control2" type="Control" parent="MarginContainer/HBoxContainer/Emulator/Input Window/MarginContainer/ScrollContainer/PortManager/ColorRect2/HBoxContainer2"]
+custom_minimum_size = Vector2(10, 0)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/HBoxContainer/Emulator/Input Window/MarginContainer/ScrollContainer/PortManager/ColorRect2/HBoxContainer2"]
+layout_mode = 2
+text = "MSB"
+
+[node name="CheckBox" type="CheckBox" parent="MarginContainer/HBoxContainer/Emulator/Input Window/MarginContainer/ScrollContainer/PortManager/ColorRect2/HBoxContainer2"]
+layout_mode = 2
+theme_override_styles/focus = SubResource("StyleBoxEmpty_i0ee1")
+disabled = true
+
+[node name="CheckBox2" type="CheckBox" parent="MarginContainer/HBoxContainer/Emulator/Input Window/MarginContainer/ScrollContainer/PortManager/ColorRect2/HBoxContainer2"]
+layout_mode = 2
+theme_override_styles/focus = SubResource("StyleBoxEmpty_i0ee1")
+
+[node name="CheckBox3" type="CheckBox" parent="MarginContainer/HBoxContainer/Emulator/Input Window/MarginContainer/ScrollContainer/PortManager/ColorRect2/HBoxContainer2"]
+layout_mode = 2
+theme_override_styles/focus = SubResource("StyleBoxEmpty_i0ee1")
+
+[node name="CheckBox4" type="CheckBox" parent="MarginContainer/HBoxContainer/Emulator/Input Window/MarginContainer/ScrollContainer/PortManager/ColorRect2/HBoxContainer2"]
+layout_mode = 2
+theme_override_styles/focus = SubResource("StyleBoxEmpty_i0ee1")
+
+[node name="CheckBox5" type="CheckBox" parent="MarginContainer/HBoxContainer/Emulator/Input Window/MarginContainer/ScrollContainer/PortManager/ColorRect2/HBoxContainer2"]
+layout_mode = 2
+theme_override_styles/focus = SubResource("StyleBoxEmpty_i0ee1")
+
+[node name="CheckBox6" type="CheckBox" parent="MarginContainer/HBoxContainer/Emulator/Input Window/MarginContainer/ScrollContainer/PortManager/ColorRect2/HBoxContainer2"]
+layout_mode = 2
+theme_override_styles/focus = SubResource("StyleBoxEmpty_i0ee1")
+
+[node name="CheckBox7" type="CheckBox" parent="MarginContainer/HBoxContainer/Emulator/Input Window/MarginContainer/ScrollContainer/PortManager/ColorRect2/HBoxContainer2"]
+layout_mode = 2
+theme_override_styles/focus = SubResource("StyleBoxEmpty_i0ee1")
+
+[node name="CheckBox8" type="CheckBox" parent="MarginContainer/HBoxContainer/Emulator/Input Window/MarginContainer/ScrollContainer/PortManager/ColorRect2/HBoxContainer2"]
+layout_mode = 2
+theme_override_styles/focus = SubResource("StyleBoxEmpty_i0ee1")
+
+[node name="Label2" type="Label" parent="MarginContainer/HBoxContainer/Emulator/Input Window/MarginContainer/ScrollContainer/PortManager/ColorRect2/HBoxContainer2"]
+layout_mode = 2
+text = "LSB"
+
+[node name="Control" type="Control" parent="MarginContainer/HBoxContainer/Emulator/Input Window/MarginContainer/ScrollContainer/PortManager/ColorRect2/HBoxContainer2"]
+custom_minimum_size = Vector2(10, 0)
+layout_mode = 2
+
+[node name="ColorRect4" type="ColorRect" parent="MarginContainer/HBoxContainer/Emulator/Input Window/MarginContainer/ScrollContainer/PortManager"]
+custom_minimum_size = Vector2(0, 80)
+layout_mode = 2
+size_flags_horizontal = 3
+color = Color(0.219608, 0.219608, 0.219608, 1)
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/HBoxContainer/Emulator/Input Window/MarginContainer/ScrollContainer/PortManager/ColorRect4"]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_top = -25.0
+offset_right = 199.0
+offset_bottom = 25.0
+grow_vertical = 2
+
+[node name="Control" type="Control" parent="MarginContainer/HBoxContainer/Emulator/Input Window/MarginContainer/ScrollContainer/PortManager/ColorRect4/HBoxContainer"]
+custom_minimum_size = Vector2(20, 0)
+layout_mode = 2
+
+[node name="Step Button" type="Button" parent="MarginContainer/HBoxContainer/Emulator/Input Window/MarginContainer/ScrollContainer/PortManager/ColorRect4/HBoxContainer"]
+custom_minimum_size = Vector2(200, 50)
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_colors/font_focus_color = Color(0.372549, 0.701961, 0.960784, 1)
+theme_override_colors/font_color = Color(0.372549, 0.701961, 0.960784, 1)
+theme_override_fonts/font = ExtResource("2_x3dv1")
+theme_override_font_sizes/font_size = 16
+theme_override_styles/focus = SubResource("StyleBoxEmpty_h23tr")
+theme_override_styles/hover = SubResource("StyleBoxFlat_uc4j2")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_ye7id")
+theme_override_styles/normal = SubResource("StyleBoxFlat_rdypq")
+disabled = true
+text = "Screen Y"
+
+[node name="Panel" type="Panel" parent="MarginContainer/HBoxContainer/Emulator/Input Window/MarginContainer/ScrollContainer/PortManager/ColorRect4" node_paths=PackedStringArray("check_list", "other_panel")]
+layout_mode = 0
+offset_left = 605.0
+offset_top = 28.0
+offset_right = 629.0
+offset_bottom = 52.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_vsrjp")
+script = ExtResource("5_2q0yt")
+check_list = [NodePath("../HBoxContainer2/CheckBox8"), NodePath("../HBoxContainer2/CheckBox7"), NodePath("../HBoxContainer2/CheckBox6"), NodePath("../HBoxContainer2/CheckBox5"), NodePath("../HBoxContainer2/CheckBox4"), NodePath("../HBoxContainer2/CheckBox3"), NodePath("../HBoxContainer2/CheckBox2"), NodePath("../HBoxContainer2/CheckBox")]
+other_panel = NodePath("../../ColorRect2/Panel")
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="MarginContainer/HBoxContainer/Emulator/Input Window/MarginContainer/ScrollContainer/PortManager/ColorRect4"]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+grow_horizontal = 0
+grow_vertical = 2
+
+[node name="OptionButton" type="OptionButton" parent="MarginContainer/HBoxContainer/Emulator/Input Window/MarginContainer/ScrollContainer/PortManager/ColorRect4/HBoxContainer2"]
+layout_mode = 2
+disabled = true
+selected = 0
+item_count = 1
+popup/item_0/text = "2"
+
+[node name="Control2" type="Control" parent="MarginContainer/HBoxContainer/Emulator/Input Window/MarginContainer/ScrollContainer/PortManager/ColorRect4/HBoxContainer2"]
+custom_minimum_size = Vector2(10, 0)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/HBoxContainer/Emulator/Input Window/MarginContainer/ScrollContainer/PortManager/ColorRect4/HBoxContainer2"]
+layout_mode = 2
+text = "MSB"
+
+[node name="CheckBox" type="CheckBox" parent="MarginContainer/HBoxContainer/Emulator/Input Window/MarginContainer/ScrollContainer/PortManager/ColorRect4/HBoxContainer2"]
+layout_mode = 2
+theme_override_styles/focus = SubResource("StyleBoxEmpty_i0ee1")
+disabled = true
+
+[node name="CheckBox2" type="CheckBox" parent="MarginContainer/HBoxContainer/Emulator/Input Window/MarginContainer/ScrollContainer/PortManager/ColorRect4/HBoxContainer2"]
+layout_mode = 2
+theme_override_styles/focus = SubResource("StyleBoxEmpty_i0ee1")
+
+[node name="CheckBox3" type="CheckBox" parent="MarginContainer/HBoxContainer/Emulator/Input Window/MarginContainer/ScrollContainer/PortManager/ColorRect4/HBoxContainer2"]
+layout_mode = 2
+theme_override_styles/focus = SubResource("StyleBoxEmpty_i0ee1")
+
+[node name="CheckBox4" type="CheckBox" parent="MarginContainer/HBoxContainer/Emulator/Input Window/MarginContainer/ScrollContainer/PortManager/ColorRect4/HBoxContainer2"]
+layout_mode = 2
+theme_override_styles/focus = SubResource("StyleBoxEmpty_i0ee1")
+
+[node name="CheckBox5" type="CheckBox" parent="MarginContainer/HBoxContainer/Emulator/Input Window/MarginContainer/ScrollContainer/PortManager/ColorRect4/HBoxContainer2"]
+layout_mode = 2
+theme_override_styles/focus = SubResource("StyleBoxEmpty_i0ee1")
+
+[node name="CheckBox6" type="CheckBox" parent="MarginContainer/HBoxContainer/Emulator/Input Window/MarginContainer/ScrollContainer/PortManager/ColorRect4/HBoxContainer2"]
+layout_mode = 2
+theme_override_styles/focus = SubResource("StyleBoxEmpty_i0ee1")
+
+[node name="CheckBox7" type="CheckBox" parent="MarginContainer/HBoxContainer/Emulator/Input Window/MarginContainer/ScrollContainer/PortManager/ColorRect4/HBoxContainer2"]
+layout_mode = 2
+theme_override_styles/focus = SubResource("StyleBoxEmpty_i0ee1")
+
+[node name="CheckBox8" type="CheckBox" parent="MarginContainer/HBoxContainer/Emulator/Input Window/MarginContainer/ScrollContainer/PortManager/ColorRect4/HBoxContainer2"]
+layout_mode = 2
+theme_override_styles/focus = SubResource("StyleBoxEmpty_i0ee1")
+
+[node name="Label2" type="Label" parent="MarginContainer/HBoxContainer/Emulator/Input Window/MarginContainer/ScrollContainer/PortManager/ColorRect4/HBoxContainer2"]
+layout_mode = 2
+text = "LSB"
+
+[node name="Control" type="Control" parent="MarginContainer/HBoxContainer/Emulator/Input Window/MarginContainer/ScrollContainer/PortManager/ColorRect4/HBoxContainer2"]
+custom_minimum_size = Vector2(10, 0)
+layout_mode = 2
+
+[node name="ColorRect5" type="ColorRect" parent="MarginContainer/HBoxContainer/Emulator/Input Window/MarginContainer/ScrollContainer/PortManager"]
+custom_minimum_size = Vector2(0, 80)
+layout_mode = 2
+size_flags_horizontal = 3
+color = Color(0.219608, 0.219608, 0.219608, 1)
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/HBoxContainer/Emulator/Input Window/MarginContainer/ScrollContainer/PortManager/ColorRect5"]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_top = -25.0
+offset_right = 199.0
+offset_bottom = 25.0
+grow_vertical = 2
+
+[node name="Control" type="Control" parent="MarginContainer/HBoxContainer/Emulator/Input Window/MarginContainer/ScrollContainer/PortManager/ColorRect5/HBoxContainer"]
+custom_minimum_size = Vector2(20, 0)
+layout_mode = 2
+
+[node name="Step Button" type="Button" parent="MarginContainer/HBoxContainer/Emulator/Input Window/MarginContainer/ScrollContainer/PortManager/ColorRect5/HBoxContainer"]
+custom_minimum_size = Vector2(200, 50)
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_colors/font_focus_color = Color(0.372549, 0.701961, 0.960784, 1)
+theme_override_colors/font_color = Color(0.372549, 0.701961, 0.960784, 1)
+theme_override_fonts/font = ExtResource("2_x3dv1")
+theme_override_font_sizes/font_size = 16
+theme_override_styles/focus = SubResource("StyleBoxEmpty_h23tr")
+theme_override_styles/hover = SubResource("StyleBoxFlat_uc4j2")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_ye7id")
+theme_override_styles/normal = SubResource("StyleBoxFlat_rdypq")
+disabled = true
+text = "Screen Mode"
+
+[node name="Panel" type="Panel" parent="MarginContainer/HBoxContainer/Emulator/Input Window/MarginContainer/ScrollContainer/PortManager/ColorRect5"]
+layout_mode = 0
+offset_left = 409.0
+offset_top = 28.0
+offset_right = 629.0
+offset_bottom = 52.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_vsrjp")
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="MarginContainer/HBoxContainer/Emulator/Input Window/MarginContainer/ScrollContainer/PortManager/ColorRect5"]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+grow_horizontal = 0
+grow_vertical = 2
+
+[node name="OptionButton" type="OptionButton" parent="MarginContainer/HBoxContainer/Emulator/Input Window/MarginContainer/ScrollContainer/PortManager/ColorRect5/HBoxContainer2"]
+layout_mode = 2
+disabled = true
+selected = 0
+item_count = 1
+popup/item_0/text = "3"
+
+[node name="Control2" type="Control" parent="MarginContainer/HBoxContainer/Emulator/Input Window/MarginContainer/ScrollContainer/PortManager/ColorRect5/HBoxContainer2"]
+custom_minimum_size = Vector2(10, 0)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/HBoxContainer/Emulator/Input Window/MarginContainer/ScrollContainer/PortManager/ColorRect5/HBoxContainer2"]
+layout_mode = 2
+text = "MSB"
+
+[node name="CheckBox" type="CheckBox" parent="MarginContainer/HBoxContainer/Emulator/Input Window/MarginContainer/ScrollContainer/PortManager/ColorRect5/HBoxContainer2"]
+layout_mode = 2
+theme_override_styles/focus = SubResource("StyleBoxEmpty_i0ee1")
+disabled = true
+
+[node name="CheckBox2" type="CheckBox" parent="MarginContainer/HBoxContainer/Emulator/Input Window/MarginContainer/ScrollContainer/PortManager/ColorRect5/HBoxContainer2"]
+layout_mode = 2
+theme_override_styles/focus = SubResource("StyleBoxEmpty_i0ee1")
+disabled = true
+
+[node name="CheckBox3" type="CheckBox" parent="MarginContainer/HBoxContainer/Emulator/Input Window/MarginContainer/ScrollContainer/PortManager/ColorRect5/HBoxContainer2"]
+layout_mode = 2
+theme_override_styles/focus = SubResource("StyleBoxEmpty_i0ee1")
+disabled = true
+
+[node name="CheckBox4" type="CheckBox" parent="MarginContainer/HBoxContainer/Emulator/Input Window/MarginContainer/ScrollContainer/PortManager/ColorRect5/HBoxContainer2"]
+layout_mode = 2
+theme_override_styles/focus = SubResource("StyleBoxEmpty_i0ee1")
+disabled = true
+
+[node name="CheckBox5" type="CheckBox" parent="MarginContainer/HBoxContainer/Emulator/Input Window/MarginContainer/ScrollContainer/PortManager/ColorRect5/HBoxContainer2"]
+layout_mode = 2
+theme_override_styles/focus = SubResource("StyleBoxEmpty_i0ee1")
+disabled = true
+
+[node name="CheckBox6" type="CheckBox" parent="MarginContainer/HBoxContainer/Emulator/Input Window/MarginContainer/ScrollContainer/PortManager/ColorRect5/HBoxContainer2"]
+layout_mode = 2
+theme_override_styles/focus = SubResource("StyleBoxEmpty_i0ee1")
+disabled = true
+
+[node name="CheckBox7" type="CheckBox" parent="MarginContainer/HBoxContainer/Emulator/Input Window/MarginContainer/ScrollContainer/PortManager/ColorRect5/HBoxContainer2"]
+layout_mode = 2
+theme_override_styles/focus = SubResource("StyleBoxEmpty_i0ee1")
+disabled = true
+
+[node name="CheckBox8" type="CheckBox" parent="MarginContainer/HBoxContainer/Emulator/Input Window/MarginContainer/ScrollContainer/PortManager/ColorRect5/HBoxContainer2"]
+layout_mode = 2
+theme_override_styles/focus = SubResource("StyleBoxEmpty_i0ee1")
+disabled = true
+
+[node name="Label2" type="Label" parent="MarginContainer/HBoxContainer/Emulator/Input Window/MarginContainer/ScrollContainer/PortManager/ColorRect5/HBoxContainer2"]
+layout_mode = 2
+text = "LSB"
+
+[node name="Control" type="Control" parent="MarginContainer/HBoxContainer/Emulator/Input Window/MarginContainer/ScrollContainer/PortManager/ColorRect5/HBoxContainer2"]
+custom_minimum_size = Vector2(10, 0)
+layout_mode = 2
+
+[node name="ColorRect3" type="ColorRect" parent="MarginContainer/HBoxContainer/Emulator/Input Window/MarginContainer/ScrollContainer/PortManager"]
+custom_minimum_size = Vector2(0, 80)
+layout_mode = 2
+size_flags_horizontal = 3
+color = Color(0.219608, 0.219608, 0.219608, 1)
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/HBoxContainer/Emulator/Input Window/MarginContainer/ScrollContainer/PortManager/ColorRect3"]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_top = -25.0
+offset_right = 199.0
+offset_bottom = 25.0
+grow_vertical = 2
+
+[node name="Control" type="Control" parent="MarginContainer/HBoxContainer/Emulator/Input Window/MarginContainer/ScrollContainer/PortManager/ColorRect3/HBoxContainer"]
+custom_minimum_size = Vector2(20, 0)
+layout_mode = 2
+
+[node name="Step Button" type="Button" parent="MarginContainer/HBoxContainer/Emulator/Input Window/MarginContainer/ScrollContainer/PortManager/ColorRect3/HBoxContainer"]
+custom_minimum_size = Vector2(200, 50)
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_colors/font_focus_color = Color(0.372549, 0.701961, 0.960784, 1)
+theme_override_colors/font_color = Color(0.372549, 0.701961, 0.960784, 1)
+theme_override_fonts/font = ExtResource("2_x3dv1")
+theme_override_font_sizes/font_size = 16
+theme_override_styles/focus = SubResource("StyleBoxEmpty_h23tr")
+theme_override_styles/hover = SubResource("StyleBoxFlat_uc4j2")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_ye7id")
+theme_override_styles/normal = SubResource("StyleBoxFlat_rdypq")
+disabled = true
+text = "Number Screen"
+
+[node name="Panel" type="Panel" parent="MarginContainer/HBoxContainer/Emulator/Input Window/MarginContainer/ScrollContainer/PortManager/ColorRect3"]
+layout_mode = 0
+offset_left = 409.0
+offset_top = 28.0
+offset_right = 629.0
+offset_bottom = 52.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_vsrjp")
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="MarginContainer/HBoxContainer/Emulator/Input Window/MarginContainer/ScrollContainer/PortManager/ColorRect3"]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+grow_horizontal = 0
+grow_vertical = 2
+
+[node name="OptionButton" type="OptionButton" parent="MarginContainer/HBoxContainer/Emulator/Input Window/MarginContainer/ScrollContainer/PortManager/ColorRect3/HBoxContainer2"]
+layout_mode = 2
+disabled = true
+selected = 0
+item_count = 1
+popup/item_0/text = "4"
+
+[node name="Control2" type="Control" parent="MarginContainer/HBoxContainer/Emulator/Input Window/MarginContainer/ScrollContainer/PortManager/ColorRect3/HBoxContainer2"]
+custom_minimum_size = Vector2(10, 0)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/HBoxContainer/Emulator/Input Window/MarginContainer/ScrollContainer/PortManager/ColorRect3/HBoxContainer2"]
+layout_mode = 2
+text = "MSB"
+
+[node name="CheckBox" type="CheckBox" parent="MarginContainer/HBoxContainer/Emulator/Input Window/MarginContainer/ScrollContainer/PortManager/ColorRect3/HBoxContainer2"]
+layout_mode = 2
+theme_override_styles/focus = SubResource("StyleBoxEmpty_i0ee1")
+disabled = true
+
+[node name="CheckBox2" type="CheckBox" parent="MarginContainer/HBoxContainer/Emulator/Input Window/MarginContainer/ScrollContainer/PortManager/ColorRect3/HBoxContainer2"]
+layout_mode = 2
+theme_override_styles/focus = SubResource("StyleBoxEmpty_i0ee1")
+disabled = true
+
+[node name="CheckBox3" type="CheckBox" parent="MarginContainer/HBoxContainer/Emulator/Input Window/MarginContainer/ScrollContainer/PortManager/ColorRect3/HBoxContainer2"]
+layout_mode = 2
+theme_override_styles/focus = SubResource("StyleBoxEmpty_i0ee1")
+disabled = true
+
+[node name="CheckBox4" type="CheckBox" parent="MarginContainer/HBoxContainer/Emulator/Input Window/MarginContainer/ScrollContainer/PortManager/ColorRect3/HBoxContainer2"]
+layout_mode = 2
+theme_override_styles/focus = SubResource("StyleBoxEmpty_i0ee1")
+disabled = true
+
+[node name="CheckBox5" type="CheckBox" parent="MarginContainer/HBoxContainer/Emulator/Input Window/MarginContainer/ScrollContainer/PortManager/ColorRect3/HBoxContainer2"]
+layout_mode = 2
+theme_override_styles/focus = SubResource("StyleBoxEmpty_i0ee1")
+disabled = true
+
+[node name="CheckBox6" type="CheckBox" parent="MarginContainer/HBoxContainer/Emulator/Input Window/MarginContainer/ScrollContainer/PortManager/ColorRect3/HBoxContainer2"]
+layout_mode = 2
+theme_override_styles/focus = SubResource("StyleBoxEmpty_i0ee1")
+disabled = true
+
+[node name="CheckBox7" type="CheckBox" parent="MarginContainer/HBoxContainer/Emulator/Input Window/MarginContainer/ScrollContainer/PortManager/ColorRect3/HBoxContainer2"]
+layout_mode = 2
+theme_override_styles/focus = SubResource("StyleBoxEmpty_i0ee1")
+disabled = true
+
+[node name="CheckBox8" type="CheckBox" parent="MarginContainer/HBoxContainer/Emulator/Input Window/MarginContainer/ScrollContainer/PortManager/ColorRect3/HBoxContainer2"]
+layout_mode = 2
+theme_override_styles/focus = SubResource("StyleBoxEmpty_i0ee1")
+disabled = true
+
+[node name="Label2" type="Label" parent="MarginContainer/HBoxContainer/Emulator/Input Window/MarginContainer/ScrollContainer/PortManager/ColorRect3/HBoxContainer2"]
+layout_mode = 2
+text = "LSB"
+
+[node name="Control" type="Control" parent="MarginContainer/HBoxContainer/Emulator/Input Window/MarginContainer/ScrollContainer/PortManager/ColorRect3/HBoxContainer2"]
+custom_minimum_size = Vector2(10, 0)
+layout_mode = 2
+
+[node name="ColorRect6" type="ColorRect" parent="MarginContainer/HBoxContainer/Emulator/Input Window/MarginContainer/ScrollContainer/PortManager"]
+custom_minimum_size = Vector2(0, 80)
+layout_mode = 2
+size_flags_horizontal = 3
+color = Color(0.219608, 0.219608, 0.219608, 1)
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/HBoxContainer/Emulator/Input Window/MarginContainer/ScrollContainer/PortManager/ColorRect6"]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_top = -25.0
+offset_right = 199.0
+offset_bottom = 25.0
+grow_vertical = 2
+
+[node name="Control" type="Control" parent="MarginContainer/HBoxContainer/Emulator/Input Window/MarginContainer/ScrollContainer/PortManager/ColorRect6/HBoxContainer"]
+custom_minimum_size = Vector2(20, 0)
+layout_mode = 2
+
+[node name="Step Button" type="Button" parent="MarginContainer/HBoxContainer/Emulator/Input Window/MarginContainer/ScrollContainer/PortManager/ColorRect6/HBoxContainer"]
+custom_minimum_size = Vector2(200, 50)
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_colors/font_focus_color = Color(0.372549, 0.701961, 0.960784, 1)
+theme_override_colors/font_color = Color(0.372549, 0.701961, 0.960784, 1)
+theme_override_fonts/font = ExtResource("2_x3dv1")
+theme_override_font_sizes/font_size = 16
+theme_override_styles/focus = SubResource("StyleBoxEmpty_h23tr")
+theme_override_styles/hover = SubResource("StyleBoxFlat_uc4j2")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_ye7id")
+theme_override_styles/normal = SubResource("StyleBoxFlat_rdypq")
+disabled = true
+text = "RNG Generator"
+
+[node name="Panel" type="Panel" parent="MarginContainer/HBoxContainer/Emulator/Input Window/MarginContainer/ScrollContainer/PortManager/ColorRect6"]
+layout_mode = 0
+offset_left = 409.0
+offset_top = 28.0
+offset_right = 629.0
+offset_bottom = 52.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_vsrjp")
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="MarginContainer/HBoxContainer/Emulator/Input Window/MarginContainer/ScrollContainer/PortManager/ColorRect6"]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+grow_horizontal = 0
+grow_vertical = 2
+
+[node name="OptionButton" type="OptionButton" parent="MarginContainer/HBoxContainer/Emulator/Input Window/MarginContainer/ScrollContainer/PortManager/ColorRect6/HBoxContainer2"]
+layout_mode = 2
+disabled = true
+selected = 0
+item_count = 1
+popup/item_0/text = "5"
+
+[node name="Control2" type="Control" parent="MarginContainer/HBoxContainer/Emulator/Input Window/MarginContainer/ScrollContainer/PortManager/ColorRect6/HBoxContainer2"]
+custom_minimum_size = Vector2(10, 0)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/HBoxContainer/Emulator/Input Window/MarginContainer/ScrollContainer/PortManager/ColorRect6/HBoxContainer2"]
+layout_mode = 2
+text = "MSB"
+
+[node name="CheckBox" type="CheckBox" parent="MarginContainer/HBoxContainer/Emulator/Input Window/MarginContainer/ScrollContainer/PortManager/ColorRect6/HBoxContainer2"]
+layout_mode = 2
+theme_override_styles/focus = SubResource("StyleBoxEmpty_i0ee1")
+disabled = true
+
+[node name="CheckBox2" type="CheckBox" parent="MarginContainer/HBoxContainer/Emulator/Input Window/MarginContainer/ScrollContainer/PortManager/ColorRect6/HBoxContainer2"]
+layout_mode = 2
+theme_override_styles/focus = SubResource("StyleBoxEmpty_i0ee1")
+disabled = true
+
+[node name="CheckBox3" type="CheckBox" parent="MarginContainer/HBoxContainer/Emulator/Input Window/MarginContainer/ScrollContainer/PortManager/ColorRect6/HBoxContainer2"]
+layout_mode = 2
+theme_override_styles/focus = SubResource("StyleBoxEmpty_i0ee1")
+disabled = true
+
+[node name="CheckBox4" type="CheckBox" parent="MarginContainer/HBoxContainer/Emulator/Input Window/MarginContainer/ScrollContainer/PortManager/ColorRect6/HBoxContainer2"]
+layout_mode = 2
+theme_override_styles/focus = SubResource("StyleBoxEmpty_i0ee1")
+disabled = true
+
+[node name="CheckBox5" type="CheckBox" parent="MarginContainer/HBoxContainer/Emulator/Input Window/MarginContainer/ScrollContainer/PortManager/ColorRect6/HBoxContainer2"]
+layout_mode = 2
+theme_override_styles/focus = SubResource("StyleBoxEmpty_i0ee1")
+disabled = true
+
+[node name="CheckBox6" type="CheckBox" parent="MarginContainer/HBoxContainer/Emulator/Input Window/MarginContainer/ScrollContainer/PortManager/ColorRect6/HBoxContainer2"]
+layout_mode = 2
+theme_override_styles/focus = SubResource("StyleBoxEmpty_i0ee1")
+disabled = true
+
+[node name="CheckBox7" type="CheckBox" parent="MarginContainer/HBoxContainer/Emulator/Input Window/MarginContainer/ScrollContainer/PortManager/ColorRect6/HBoxContainer2"]
+layout_mode = 2
+theme_override_styles/focus = SubResource("StyleBoxEmpty_i0ee1")
+disabled = true
+
+[node name="CheckBox8" type="CheckBox" parent="MarginContainer/HBoxContainer/Emulator/Input Window/MarginContainer/ScrollContainer/PortManager/ColorRect6/HBoxContainer2"]
+layout_mode = 2
+theme_override_styles/focus = SubResource("StyleBoxEmpty_i0ee1")
+disabled = true
+
+[node name="Label2" type="Label" parent="MarginContainer/HBoxContainer/Emulator/Input Window/MarginContainer/ScrollContainer/PortManager/ColorRect6/HBoxContainer2"]
+layout_mode = 2
+text = "LSB"
+
+[node name="Control" type="Control" parent="MarginContainer/HBoxContainer/Emulator/Input Window/MarginContainer/ScrollContainer/PortManager/ColorRect6/HBoxContainer2"]
+custom_minimum_size = Vector2(10, 0)
+layout_mode = 2
+
+[node name="Step Button" type="Button" parent="MarginContainer/HBoxContainer/Emulator/Input Window/MarginContainer/ScrollContainer/PortManager"]
+custom_minimum_size = Vector2(0, 80)
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_colors/font_focus_color = Color(0.372549, 0.701961, 0.960784, 1)
+theme_override_colors/font_color = Color(0.372549, 0.701961, 0.960784, 1)
+theme_override_fonts/font = ExtResource("2_x3dv1")
+theme_override_font_sizes/font_size = 16
+theme_override_styles/focus = SubResource("StyleBoxEmpty_h23tr")
+theme_override_styles/hover = SubResource("StyleBoxFlat_uc4j2")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_ye7id")
+theme_override_styles/normal = SubResource("StyleBoxFlat_7uwgn")
+shortcut = SubResource("Shortcut_tt53e")
+text = "+"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 10
+
+[node name="top bar" type="ColorRect" parent="MarginContainer/HBoxContainer/VBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 44)
+layout_mode = 2
+color = Color(0.219608, 0.219608, 0.219608, 1)
+script = ExtResource("1_e1rbs")
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/HBoxContainer/VBoxContainer/top bar"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 2
+theme_override_constants/margin_top = 2
+theme_override_constants/margin_right = 2
+theme_override_constants/margin_bottom = 2
+
+[node name="ColorRect" type="ColorRect" parent="MarginContainer/HBoxContainer/VBoxContainer/top bar/MarginContainer"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+color = Color(0.176471, 0.176471, 0.176471, 1)
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/HBoxContainer/VBoxContainer/top bar/MarginContainer/ColorRect"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+theme_override_constants/margin_left = 2
+theme_override_constants/margin_top = 2
+theme_override_constants/margin_right = 2
+theme_override_constants/margin_bottom = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/HBoxContainer/VBoxContainer/top bar/MarginContainer/ColorRect/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 5
+
+[node name="Button5" type="Button" parent="MarginContainer/HBoxContainer/VBoxContainer/top bar/MarginContainer/ColorRect/MarginContainer/HBoxContainer"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+theme_override_colors/font_focus_color = Color(0.372549, 0.701961, 0.960784, 1)
+theme_override_colors/font_color = Color(0.372549, 0.701961, 0.960784, 1)
+theme_override_fonts/font = ExtResource("2_x3dv1")
+theme_override_font_sizes/font_size = 16
+theme_override_styles/focus = SubResource("StyleBoxEmpty_h23tr")
+theme_override_styles/hover = SubResource("StyleBoxFlat_uc4j2")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_ye7id")
+theme_override_styles/normal = SubResource("StyleBoxFlat_ye7id")
+shortcut = SubResource("Shortcut_tt53e")
+text = "New"
+
+[node name="Button" type="Button" parent="MarginContainer/HBoxContainer/VBoxContainer/top bar/MarginContainer/ColorRect/MarginContainer/HBoxContainer"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+theme_override_colors/font_focus_color = Color(0.372549, 0.701961, 0.960784, 1)
+theme_override_colors/font_color = Color(0.372549, 0.701961, 0.960784, 1)
+theme_override_fonts/font = ExtResource("2_x3dv1")
+theme_override_font_sizes/font_size = 16
+theme_override_styles/focus = SubResource("StyleBoxEmpty_h23tr")
+theme_override_styles/hover = SubResource("StyleBoxFlat_uc4j2")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_ye7id")
+theme_override_styles/normal = SubResource("StyleBoxFlat_ye7id")
+shortcut = SubResource("Shortcut_bj7dq")
+text = "Open"
+
+[node name="Button2" type="Button" parent="MarginContainer/HBoxContainer/VBoxContainer/top bar/MarginContainer/ColorRect/MarginContainer/HBoxContainer"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+theme_override_colors/font_focus_color = Color(0.372549, 0.701961, 0.960784, 1)
+theme_override_colors/font_color = Color(0.372549, 0.701961, 0.960784, 1)
+theme_override_fonts/font = ExtResource("2_x3dv1")
+theme_override_font_sizes/font_size = 16
+theme_override_styles/focus = SubResource("StyleBoxEmpty_h23tr")
+theme_override_styles/hover = SubResource("StyleBoxFlat_uc4j2")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_ye7id")
+theme_override_styles/normal = SubResource("StyleBoxFlat_ye7id")
+shortcut = SubResource("Shortcut_qrg7t")
+text = "Save"
+
+[node name="Button4" type="Button" parent="MarginContainer/HBoxContainer/VBoxContainer/top bar/MarginContainer/ColorRect/MarginContainer/HBoxContainer"]
+custom_minimum_size = Vector2(130, 0)
+layout_mode = 2
+theme_override_colors/font_focus_color = Color(0.372549, 0.701961, 0.960784, 1)
+theme_override_colors/font_color = Color(0.372549, 0.701961, 0.960784, 1)
+theme_override_fonts/font = ExtResource("2_x3dv1")
+theme_override_font_sizes/font_size = 16
+theme_override_styles/focus = SubResource("StyleBoxEmpty_h23tr")
+theme_override_styles/hover = SubResource("StyleBoxFlat_uc4j2")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_ye7id")
+theme_override_styles/normal = SubResource("StyleBoxFlat_ye7id")
+text = "Export"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/HBoxContainer/VBoxContainer/top bar/MarginContainer/ColorRect"]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -40.0
+offset_top = -20.0
+offset_bottom = 20.0
+grow_horizontal = 0
+grow_vertical = 2
+theme_override_constants/separation = 20
+
+[node name="FPS" type="Label" parent="MarginContainer/HBoxContainer/VBoxContainer/top bar/MarginContainer/ColorRect/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_colors/font_color = Color(0.372549, 0.701961, 0.960784, 1)
+theme_override_fonts/font = ExtResource("2_x3dv1")
+text = "FPS:000+"
+script = ExtResource("9_ksws7")
+
+[node name="Label3" type="Label" parent="MarginContainer/HBoxContainer/VBoxContainer/top bar/MarginContainer/ColorRect/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_colors/font_color = Color(0.372549, 0.701961, 0.960784, 1)
+theme_override_fonts/font = ExtResource("2_x3dv1")
+text = "VERSION 1.3"
+
+[node name="Edit View Rect" type="ColorRect" parent="MarginContainer/HBoxContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+color = Color(0.176471, 0.176471, 0.176471, 1)
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/HBoxContainer/VBoxContainer/Edit View Rect"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 0
+
+[node name="Color Rect" type="ColorRect" parent="MarginContainer/HBoxContainer/VBoxContainer/Edit View Rect/VBoxContainer"]
+custom_minimum_size = Vector2(0, 60)
+layout_mode = 2
+color = Color(0.152941, 0.152941, 0.152941, 1)
+
+[node name="File Bar" type="HBoxContainer" parent="MarginContainer/HBoxContainer/VBoxContainer/Edit View Rect/VBoxContainer/Color Rect"]
+unique_name_in_owner = true
+layout_mode = 2
+offset_right = 945.0
+offset_bottom = 60.0
+theme_override_constants/separation = 10
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/HBoxContainer/VBoxContainer/Edit View Rect/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 4
+theme_override_constants/margin_bottom = 4
+
+[node name="Program View" type="TextEdit" parent="MarginContainer/HBoxContainer/VBoxContainer/Edit View Rect/VBoxContainer/MarginContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/background_color = Color(0.12549, 0.12549, 0.12549, 1)
+theme_override_colors/caret_color = Color(0.372549, 0.701961, 0.960784, 1)
+theme_override_fonts/font = ExtResource("2_x3dv1")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_i3vly")
+caret_multiple = false
+script = ExtResource("3_rfrod")
+
+[node name="Error Window" type="Panel" parent="MarginContainer/HBoxContainer/VBoxContainer/Edit View Rect"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -250.0
+offset_top = -150.0
+offset_right = 250.0
+offset_bottom = 150.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_alj6n")
+script = ExtResource("3_4ac6n")
+
+[node name="Panel" type="Panel" parent="MarginContainer/HBoxContainer/VBoxContainer/Edit View Rect/Error Window"]
+custom_minimum_size = Vector2(0, 31)
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+grow_horizontal = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_v1oai")
+
+[node name="Button" type="Button" parent="MarginContainer/HBoxContainer/VBoxContainer/Edit View Rect/Error Window/Panel"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -34.5
+offset_right = -2.5
+offset_bottom = 31.0
+grow_horizontal = 0
+theme_override_colors/font_hover_color = Color(0.666667, 0.666667, 0.666667, 1)
+theme_override_colors/font_pressed_color = Color(1, 0, 0, 1)
+theme_override_colors/font_focus_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("2_x3dv1")
+theme_override_font_sizes/font_size = 11
+theme_override_styles/focus = SubResource("StyleBoxFlat_kk6mc")
+theme_override_styles/hover = SubResource("StyleBoxFlat_kk6mc")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_kk6mc")
+theme_override_styles/normal = SubResource("StyleBoxFlat_kk6mc")
+keep_pressed_outside = true
+text = "X"
+
+[node name="ErrorLabel" type="RichTextLabel" parent="MarginContainer/HBoxContainer/VBoxContainer/Edit View Rect/Error Window"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 35.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/normal_font = ExtResource("2_x3dv1")
+theme_override_font_sizes/normal_font_size = 20
+bbcode_enabled = true
+text = "[center][color=red]Error Message 1 2 3[/color][/center]"
+
+[node name="Save Window" type="Panel" parent="MarginContainer/HBoxContainer/VBoxContainer/Edit View Rect"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -250.0
+offset_top = -150.0
+offset_right = 250.0
+offset_bottom = 150.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_alj6n")
+script = ExtResource("5_mhw0u")
+
+[node name="Panel" type="Panel" parent="MarginContainer/HBoxContainer/VBoxContainer/Edit View Rect/Save Window"]
+custom_minimum_size = Vector2(0, 31)
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+grow_horizontal = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_v1oai")
+
+[node name="Button" type="Button" parent="MarginContainer/HBoxContainer/VBoxContainer/Edit View Rect/Save Window/Panel"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -34.5
+offset_right = -2.5
+offset_bottom = 31.0
+grow_horizontal = 0
+theme_override_colors/font_hover_color = Color(0.666667, 0.666667, 0.666667, 1)
+theme_override_colors/font_pressed_color = Color(1, 0, 0, 1)
+theme_override_colors/font_focus_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("2_x3dv1")
+theme_override_font_sizes/font_size = 11
+theme_override_styles/focus = SubResource("StyleBoxFlat_kk6mc")
+theme_override_styles/hover = SubResource("StyleBoxFlat_kk6mc")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_kk6mc")
+theme_override_styles/normal = SubResource("StyleBoxFlat_kk6mc")
+keep_pressed_outside = true
+text = "X"
+
+[node name="ErrorLabel" type="RichTextLabel" parent="MarginContainer/HBoxContainer/VBoxContainer/Edit View Rect/Save Window"]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 1
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_top = -50.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/normal_font = ExtResource("2_x3dv1")
+theme_override_font_sizes/normal_font_size = 20
+bbcode_enabled = true
+text = "[center]Save file before quitting?[/center]"
+
+[node name="Button" type="Button" parent="MarginContainer/HBoxContainer/VBoxContainer/Edit View Rect/Save Window"]
+layout_mode = 1
+anchors_preset = -1
+offset_left = 75.0
+offset_top = 220.0
+offset_right = 200.0
+offset_bottom = 270.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_colors/font_focus_color = Color(0.372549, 0.701961, 0.960784, 1)
+theme_override_colors/font_color = Color(0.372549, 0.701961, 0.960784, 1)
+theme_override_fonts/font = ExtResource("2_x3dv1")
+theme_override_font_sizes/font_size = 20
+theme_override_styles/focus = SubResource("StyleBoxEmpty_6rgrh")
+theme_override_styles/hover = SubResource("StyleBoxFlat_gkm7j")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_evtyq")
+theme_override_styles/normal = SubResource("StyleBoxFlat_p1j0o")
+keep_pressed_outside = true
+text = "Yes"
+metadata/_edit_use_anchors_ = true
+
+[node name="Button2" type="Button" parent="MarginContainer/HBoxContainer/VBoxContainer/Edit View Rect/Save Window"]
+layout_mode = 1
+anchors_preset = -1
+offset_left = 300.0
+offset_top = 220.0
+offset_right = 425.0
+offset_bottom = 270.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_colors/font_focus_color = Color(0.372549, 0.701961, 0.960784, 1)
+theme_override_colors/font_color = Color(0.372549, 0.701961, 0.960784, 1)
+theme_override_fonts/font = ExtResource("2_x3dv1")
+theme_override_font_sizes/font_size = 20
+theme_override_styles/focus = SubResource("StyleBoxEmpty_6rgrh")
+theme_override_styles/hover = SubResource("StyleBoxFlat_gkm7j")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_evtyq")
+theme_override_styles/normal = SubResource("StyleBoxFlat_p1j0o")
+keep_pressed_outside = true
+text = "No"
+metadata/_edit_use_anchors_ = true
+
+[node name="Error Bottom Tab" type="ColorRect" parent="MarginContainer/HBoxContainer/VBoxContainer"]
+unique_name_in_owner = true
+visible = false
+custom_minimum_size = Vector2(0, 140)
+layout_mode = 2
+color = Color(0.176471, 0.176471, 0.176471, 1)
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/HBoxContainer/VBoxContainer/Error Bottom Tab"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_right = 5
+
+[node name="Label" type="Label" parent="MarginContainer/HBoxContainer/VBoxContainer/Error Bottom Tab/MarginContainer"]
+custom_minimum_size = Vector2(0, 60)
+layout_mode = 2
+size_flags_vertical = 1
+theme_override_colors/font_color = Color(0.772549, 0.411765, 0.411765, 1)
+theme_override_fonts/font = ExtResource("2_x3dv1")
+autowrap_mode = 3
+
+[connection signal="button_up" from="MarginContainer/HBoxContainer/Emulator/HBoxContainer/MarginContainer/VBoxContainer2/ColorRect/MarginContainer/VBoxContainer/Start Stop Button" to="MarginContainer/HBoxContainer/Emulator" method="_Start_Stop_Pressed"]
+[connection signal="button_up" from="MarginContainer/HBoxContainer/Emulator/HBoxContainer/MarginContainer/VBoxContainer2/ColorRect/MarginContainer/VBoxContainer/HBoxContainer/Step Button" to="MarginContainer/HBoxContainer/Emulator" method="_Step_Pressed"]
+[connection signal="button_up" from="MarginContainer/HBoxContainer/Emulator/HBoxContainer/MarginContainer/VBoxContainer2/ColorRect/MarginContainer/VBoxContainer/HBoxContainer/Reset Button" to="MarginContainer/HBoxContainer/Emulator" method="_Reset_Pressed"]
+[connection signal="value_changed" from="MarginContainer/HBoxContainer/Emulator/HBoxContainer/MarginContainer/VBoxContainer2/ColorRect/MarginContainer/VBoxContainer/HBoxContainer2/SpeedSlider" to="MarginContainer/HBoxContainer/Emulator" method="_Speed_Slider_Change"]
+[connection signal="value_changed" from="MarginContainer/HBoxContainer/Emulator/HBoxContainer/MarginContainer/VBoxContainer2/ColorRect/MarginContainer/VBoxContainer/HBoxContainer2/SpeedInput" to="MarginContainer/HBoxContainer/Emulator" method="_Speed_Input_Change"]
+[connection signal="button_up" from="MarginContainer/HBoxContainer/Emulator/HBoxContainer/MarginContainer/VBoxContainer2/ColorRect4/MarginContainer/VBoxContainer/EditInputs" to="MarginContainer/HBoxContainer/Emulator/Input Window" method="show_window"]
+[connection signal="toggled" from="MarginContainer/HBoxContainer/Emulator/HBoxContainer/MarginContainer/VBoxContainer2/ColorRect4/MarginContainer/VBoxContainer/Screen Wrapping Check Button" to="MarginContainer/HBoxContainer/Emulator/HBoxContainer/MarginContainer2/VBoxContainer/Screen" method="_Screen_Wrapping_Toggled"]
+[connection signal="toggled" from="MarginContainer/HBoxContainer/Emulator/HBoxContainer/MarginContainer/VBoxContainer2/ColorRect4/MarginContainer/VBoxContainer/Follow Check Button" to="MarginContainer/HBoxContainer/Emulator" method="_Follow_Program_Toggled"]
+[connection signal="toggled" from="MarginContainer/HBoxContainer/Emulator/HBoxContainer/MarginContainer/VBoxContainer2/ColorRect4/MarginContainer/VBoxContainer/SignedNumberToggle" to="MarginContainer/HBoxContainer/Emulator/HBoxContainer/MarginContainer2/VBoxContainer/Screen" method="_signed_mode_toggled"]
+[connection signal="gui_input" from="MarginContainer/HBoxContainer/Emulator/Input Window/Panel" to="MarginContainer/HBoxContainer/Emulator/Input Window" method="_mouse_input_event"]
+[connection signal="mouse_entered" from="MarginContainer/HBoxContainer/Emulator/Input Window/Panel" to="MarginContainer/HBoxContainer/Emulator/Input Window" method="_mouse_entered"]
+[connection signal="mouse_exited" from="MarginContainer/HBoxContainer/Emulator/Input Window/Panel" to="MarginContainer/HBoxContainer/Emulator/Input Window" method="_mouse_exited"]
+[connection signal="button_up" from="MarginContainer/HBoxContainer/Emulator/Input Window/Panel/Button" to="MarginContainer/HBoxContainer/Emulator/Input Window" method="_close_button"]
+[connection signal="button_up" from="MarginContainer/HBoxContainer/Emulator/Input Window/MarginContainer/ScrollContainer/PortManager/Step Button" to="MarginContainer/HBoxContainer/Emulator/Input Window/MarginContainer/ScrollContainer/PortManager" method="create_input"]
+[connection signal="pressed" from="MarginContainer/HBoxContainer/VBoxContainer/top bar/MarginContainer/ColorRect/MarginContainer/HBoxContainer/Button5" to="MarginContainer/HBoxContainer/VBoxContainer/top bar" method="create_new_file" binds= ["New File"]]
+[connection signal="pressed" from="MarginContainer/HBoxContainer/VBoxContainer/top bar/MarginContainer/ColorRect/MarginContainer/HBoxContainer/Button" to="MarginContainer/HBoxContainer/VBoxContainer/top bar" method="_open_file_press"]
+[connection signal="pressed" from="MarginContainer/HBoxContainer/VBoxContainer/top bar/MarginContainer/ColorRect/MarginContainer/HBoxContainer/Button2" to="MarginContainer/HBoxContainer/VBoxContainer/top bar" method="_save_file_press"]
+[connection signal="button_up" from="MarginContainer/HBoxContainer/VBoxContainer/top bar/MarginContainer/ColorRect/MarginContainer/HBoxContainer/Button4" to="MarginContainer/HBoxContainer/VBoxContainer/top bar" method="_compile_press"]
+[connection signal="caret_changed" from="MarginContainer/HBoxContainer/VBoxContainer/Edit View Rect/VBoxContainer/MarginContainer/Program View" to="MarginContainer/HBoxContainer/VBoxContainer/Edit View Rect/VBoxContainer/MarginContainer/Program View" method="_on_caret_changed"]
+[connection signal="gutter_clicked" from="MarginContainer/HBoxContainer/VBoxContainer/Edit View Rect/VBoxContainer/MarginContainer/Program View" to="MarginContainer/HBoxContainer/VBoxContainer/Edit View Rect/VBoxContainer/MarginContainer/Program View" method="_on_gutter_clicked"]
+[connection signal="text_changed" from="MarginContainer/HBoxContainer/VBoxContainer/Edit View Rect/VBoxContainer/MarginContainer/Program View" to="MarginContainer/HBoxContainer/VBoxContainer/top bar" method="_on_program_view_text_changed"]
+[connection signal="text_changed" from="MarginContainer/HBoxContainer/VBoxContainer/Edit View Rect/VBoxContainer/MarginContainer/Program View" to="MarginContainer/HBoxContainer/VBoxContainer/Edit View Rect/VBoxContainer/MarginContainer/Program View" method="_on_text_changed"]
+[connection signal="text_set" from="MarginContainer/HBoxContainer/VBoxContainer/Edit View Rect/VBoxContainer/MarginContainer/Program View" to="MarginContainer/HBoxContainer/VBoxContainer/Edit View Rect/VBoxContainer/MarginContainer/Program View" method="_on_text_changed"]
+[connection signal="gui_input" from="MarginContainer/HBoxContainer/VBoxContainer/Edit View Rect/Error Window/Panel" to="MarginContainer/HBoxContainer/VBoxContainer/Edit View Rect/Error Window" method="_mouse_input_event"]
+[connection signal="mouse_entered" from="MarginContainer/HBoxContainer/VBoxContainer/Edit View Rect/Error Window/Panel" to="MarginContainer/HBoxContainer/VBoxContainer/Edit View Rect/Error Window" method="_mouse_entered"]
+[connection signal="mouse_exited" from="MarginContainer/HBoxContainer/VBoxContainer/Edit View Rect/Error Window/Panel" to="MarginContainer/HBoxContainer/VBoxContainer/Edit View Rect/Error Window" method="_mouse_exited"]
+[connection signal="button_up" from="MarginContainer/HBoxContainer/VBoxContainer/Edit View Rect/Error Window/Panel/Button" to="MarginContainer/HBoxContainer/VBoxContainer/Edit View Rect/Error Window" method="_close_button"]
+[connection signal="gui_input" from="MarginContainer/HBoxContainer/VBoxContainer/Edit View Rect/Save Window/Panel" to="MarginContainer/HBoxContainer/VBoxContainer/Edit View Rect/Save Window" method="_mouse_input_event"]
+[connection signal="mouse_entered" from="MarginContainer/HBoxContainer/VBoxContainer/Edit View Rect/Save Window/Panel" to="MarginContainer/HBoxContainer/VBoxContainer/Edit View Rect/Save Window" method="_mouse_entered"]
+[connection signal="mouse_exited" from="MarginContainer/HBoxContainer/VBoxContainer/Edit View Rect/Save Window/Panel" to="MarginContainer/HBoxContainer/VBoxContainer/Edit View Rect/Save Window" method="_mouse_exited"]
+[connection signal="button_up" from="MarginContainer/HBoxContainer/VBoxContainer/Edit View Rect/Save Window/Panel/Button" to="MarginContainer/HBoxContainer/VBoxContainer/Edit View Rect/Save Window" method="_close_button"]
+[connection signal="button_up" from="MarginContainer/HBoxContainer/VBoxContainer/Edit View Rect/Save Window/Button" to="MarginContainer/HBoxContainer/VBoxContainer/Edit View Rect/Save Window" method="_exit_and_save"]
+[connection signal="button_up" from="MarginContainer/HBoxContainer/VBoxContainer/Edit View Rect/Save Window/Button2" to="MarginContainer/HBoxContainer/VBoxContainer/Edit View Rect/Save Window" method="_exit_without_save"]

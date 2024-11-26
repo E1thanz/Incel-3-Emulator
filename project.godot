@@ -15,11 +15,16 @@ run/main_scene="res://Scenes/root.tscn"
 config/features=PackedStringArray("4.3", "Mobile")
 config/icon="res://Resources/Incel IDE Icon.png"
 
+[autoload]
+
+ValidKeys="*res://scripts/valid_keys.gd"
+
 [display]
 
 window/size/viewport_width=1920
 window/size/viewport_height=1080
 window/size/mode=2
+window/stretch/mode="canvas_items"
 
 [dotnet]
 
