@@ -372,7 +372,7 @@ grow_vertical = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 min_value = 1.0
-max_value = 10000.0
+max_value = 100000.0
 value = 1.0
 exp_edit = true
 
@@ -391,7 +391,7 @@ offset_bottom = 25.0
 grow_horizontal = 0
 grow_vertical = 2
 size_flags_horizontal = 8
-max_value = 10000.0
+max_value = 100000.0
 
 [node name="ColorRect5" type="ColorRect" parent="MarginContainer/HBoxContainer/Emulator/HBoxContainer/MarginContainer/VBoxContainer2"]
 custom_minimum_size = Vector2(0, 80)
@@ -1582,7 +1582,7 @@ metadata/_edit_use_anchors_ = true
 [node name="Error Bottom Tab" type="ColorRect" parent="MarginContainer/HBoxContainer/VBoxContainer"]
 unique_name_in_owner = true
 visible = false
-custom_minimum_size = Vector2(0, 140)
+custom_minimum_size = Vector2(0, 100)
 layout_mode = 2
 color = Color(0.176471, 0.176471, 0.176471, 1)
 
@@ -1602,6 +1602,7 @@ layout_mode = 2
 size_flags_vertical = 1
 theme_override_colors/font_color = Color(0.772549, 0.411765, 0.411765, 1)
 theme_override_fonts/font = ExtResource("2_x3dv1")
+theme_override_font_sizes/font_size = 10
 autowrap_mode = 3
 
 [connection signal="button_up" from="MarginContainer/HBoxContainer/Emulator/HBoxContainer/MarginContainer/VBoxContainer2/ColorRect/MarginContainer/VBoxContainer/Start Stop Button" to="MarginContainer/HBoxContainer/Emulator" method="_Start_Stop_Pressed"]

@@ -22,7 +22,7 @@ var ips = 1
 
 var ram_values = []
 var regs_values = [0, 0, 0, 0, 0, 0, 0, 0]
-var regs_hold = []
+var regs_hold = [0, 0, 0, 0, 0, 0, 0, 0]
 var flag_values = []
 var pc = 0
 var callstack = []
@@ -48,12 +48,19 @@ func update_settings():
 	settings.set_value("settings", "screen_wrap", screen_wrapping_check_button.button_pressed)
 	settings.set_value("settings", "follow_program", follow_program_check_button.button_pressed)
 	settings.set_value("settings", "signed_display", signed_number_display_button.button_pressed)
+	settings.set_value("settings", "screen_size", port_manager.get_child(0).get_child(1).selected)
 	var inputs = []
 	for port in [1, 2, 6, 7]:
 		for key in port_manager.Current_Inputs[port].keys():
 			inputs.append([key, port_manager.Current_Inputs[port][key]])
 		settings.set_value("inputs", str(port), inputs.duplicate())
 		inputs.clear()
+	var paths = []
+	for button in %"top bar".fileButtons:
+		var path = button.get_meta("FilePath")
+		if path != "":
+			paths.append(path)
+	settings.set_value("files", "paths", paths)
 	settings.save("user://settings.txt")
 
 func load_settings():
@@ -65,6 +72,10 @@ func load_settings():
 	screen_wrapping_check_button.button_pressed = settings.get_value("settings", "screen_wrap")
 	follow_program_check_button.button_pressed = settings.get_value("settings", "follow_program")
 	signed_number_display_button.button_pressed = settings.get_value("settings", "signed_display")
+	var panel: Panel = port_manager.get_child(0).get_child(1)
+	var selected = settings.get_value("settings", "screen_size")
+	panel.check_list[selected].button_pressed = true
+	panel._on_check_box_toggled(selected)
 	for port in [1, 2, 6, 7]:
 		for pair in settings.get_value("inputs", str(port)):
 			port_manager.load_input(port, pair[0], pair[1])
@@ -144,7 +155,7 @@ func _Reset_Pressed() -> void:
 			button.disable(false)
 		for button in %"top bar".get_child(0).get_child(0).get_child(0).get_child(0).get_children():
 			button.disabled = false
-	regs_hold.clear()
+	regs_hold.map(func(_var): return 0)
 	callstack.clear()
 	
 	for value in 256:
@@ -172,7 +183,10 @@ func _Reset_Pressed() -> void:
 	
 	for line in program_view.get_line_count():
 		program_view.set_line_gutter_text(line, 1, "")
-	program_view.set_line_gutter_text(0, 1, " >")
+	if program_view.program.size() > 0:
+		program_view.set_line_gutter_text(program_view.program[0][1], 1, ">")
+	else:
+		program_view.set_line_gutter_text(0, 1, " >")
 
 func _Step_Pressed() -> void:
 	if not is_runnable and not is_running:
@@ -192,18 +206,16 @@ func _Follow_Program_Toggled(toggled_on: bool) -> void:
 func _Speed_Slider_Change(value: float) -> void:
 	ips = value
 	speed_input.value = value
-	update_settings()
 
 func _Speed_Input_Change(value: float) -> void:
 	ips = value
 	speed_slider.value = value
-	update_settings()
 	
 const REGISTERS = {"r0":0, "r1":1, "r2":2, "r3":3, "r4":4, "r5":5, "r6":6, "r7":7}
 const CONDITIONS = {"novf": 0, "ovf": 1, "nc": 2, "c": 3, "nmsb": 4, "msb": 5, "nz": 6, "z": 7,
 					"!overflow": 0, "overflow": 1, "!carry": 2, "carry": 3, "!msb": 4, "!zero": 6, "zero": 7,
 					"!=": 6, "=": 7, "<": 2, ">=": 3, ">=0": 4, "<0": 5,
-					"!ovf": 0, "!c": 2, "!z": 6, "eq": 7, "neq": 6}
+					"!ovf": 0, "!c": 2, "!z": 6, "eq": 7, "neq": 6, "!eq": 6}
 
 func Parse_Literal(value: String):
 	if value.to_lower() in program_view.definitions:
@@ -340,13 +352,18 @@ func Process_Instruction() -> void:
 				flag_values[3] = output == 0
 			6:
 				var regA = split_line[1]
-				var imm = split_line[2]
-				var dest = split_line[3]
+				var imm = 0
+				var dest = split_line[2]
+				if split_line.size() == 4:
+					imm = split_line[2]
+					dest = split_line[3]
 				regs_values[dest] = ram_values[regs_values[regA] + imm] 
 			7:
 				var regA = split_line[1]
-				var regB = split_line[3]
-				var imm = split_line[2]
+				var regB = split_line[2]
+				var imm = 0
+				if split_line.size() == 4:
+					imm = split_line[3]
 				ram_values[regs_values[regA] + imm] = regs_values[regB]
 			8:
 				pc = split_line[1] - 1
@@ -361,7 +378,7 @@ func Process_Instruction() -> void:
 					l = split_line[1]
 				if l == 0:
 					regs_hold = regs_values.duplicate()
-					regs_values.clear()
+					regs_values.map(func(_var): return 0)
 				else:
 					regs_values = regs_hold
 			12:
@@ -374,7 +391,7 @@ func Process_Instruction() -> void:
 					block_instruction = m + 1
 			13:
 				if is_running:
-					_Start_Stop_Pressed()
+					threaded_stop()
 					regs_values[0] = 0
 					return
 			14:
@@ -392,12 +409,12 @@ func Process_Instruction() -> void:
 				if dir == 0:
 					if se == 0:
 						output = regs_values[regA] >> imm
+						flag_values[1] = 255 >> (8 - imm) & regs_values[regA] != 0
 						regs_values[regA] = output
-						flag_values[1] = 255 >> imm & regs_values[regA] != 0
 					else:
 						output = Bind_Literal((regs_values[regA] >> imm) + (65280 >> imm if regs_values[regA] / 128 == 1 else 0))
+						flag_values[1] = 255 >> (8 - imm) & regs_values[regA] != 0
 						regs_values[regA] = output
-						flag_values[1] = 255 >> imm & regs_values[regA] != 0
 				else:
 					output = regs_values[regA] << imm
 					regs_values[regA] = Bind_Literal(output)
@@ -473,23 +490,26 @@ func threaded_run():
 	Thread.set_thread_safety_checks_enabled(false)
 	while true:
 		semaphore.wait()
-		if not is_running:
+		if not is_running or program_view.program.size() == 0:
 			return
 		Process_Instruction()
 		count += 1
 		if program_view.get_line_gutter_icon(program_view.program[pc][1], 2) != null:
-			start_stop_button.text = "Start"
-			program_view.editable = true
-			follow_program_check_button.disabled = false
-			screen_wrapping_check_button.disabled = false
-			signed_number_display_button.disabled = false
-			%"EditInputs".disabled = false
-			for button in %"top bar".fileButtons:
-				button.disable(false)
-			for button in %"top bar".get_child(0).get_child(0).get_child(0).get_child(0).get_children():
-				button.disabled = false
-			is_running = false
+			threaded_stop()
 			return
+
+func threaded_stop():
+	start_stop_button.text = "Start"
+	program_view.editable = true
+	follow_program_check_button.disabled = false
+	screen_wrapping_check_button.disabled = false
+	signed_number_display_button.disabled = false
+	%"EditInputs".disabled = false
+	for button in %"top bar".fileButtons:
+		button.disable(false)
+	for button in %"top bar".get_child(0).get_child(0).get_child(0).get_child(0).get_children():
+		button.disabled = false
+	is_running = false
 
 var previous_pc = 0
 
@@ -507,7 +527,10 @@ func _process(_delta: float) -> void:
 		if previous_pc < program_view.get_line_count():
 			program_view.set_line_gutter_text(program_view.program[previous_pc][1], 1, "")
 		if pc < program_view.get_line_count():
-			program_view.set_line_gutter_text(program_view.program[pc][1], 1, " >")
+			if program_view.program.size() != 0:
+				program_view.set_line_gutter_text(program_view.program[pc][1], 1, " >")
+			else:
+				program_view.set_line_gutter_text(0, 1, " >")
 	previous_pc = pc
 
 func _physics_process(delta: float) -> void:

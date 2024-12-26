@@ -37,25 +37,21 @@ func _ready():
 	%Emulator._Reset_Pressed()
 	
 	get_tree().set_auto_accept_quit(false)
-	
-	if not FileAccess.file_exists("user://fileBar.txt"):
-		create_new_file("New File")
+	var settings = ConfigFile.new()
+	var err = settings.load("user://settings.txt")
+	if err != OK:
 		return
-		
-	var file = FileAccess.open("user://fileBar.txt", FileAccess.READ_WRITE)
-	var new_contents = ""
-	while file.get_position() < file.get_length():
-		var path = file.get_line().strip_edges()
-		if not FileAccess.file_exists(path):
-			continue
-		new_contents += path + "\n"
-		var split_path = Array(path.split("\\")).pop_back()
-		create_new_file(split_path)
-		activeButton.set_meta("FilePath", path)
-		var program_file = FileAccess.open(activeButton.get_meta("FilePath"), FileAccess.READ)
-		activeButton.set_meta("File", program_file.get_as_text())
-	file.seek(0)
-	file.store_string(new_contents)
+	var paths = settings.get_value("files", "paths")
+	
+	if paths != null and paths.size() != 0:
+		for path in paths:
+			if not FileAccess.file_exists(path):
+				continue
+			var split_path = Array(path.split("\\")).pop_back()
+			create_new_file(split_path)
+			activeButton.set_meta("FilePath", path)
+			var program_file = FileAccess.open(activeButton.get_meta("FilePath"), FileAccess.READ)
+			activeButton.set_meta("File", program_file.get_as_text())
 	
 	if activeButton == null:
 		create_new_file("New File")
@@ -93,6 +89,8 @@ func _notification(notification):
 		if activeButton.get_meta("Changed"):
 			%"Save Window".show_request()
 			var response = await Signal(%"Save Window", "save_response")
+			if response == null:
+				return
 			if response:
 				_save_file_press()
 		close()
@@ -219,9 +217,10 @@ func _close_file(clickedButton):
 	if clickedButton.get_meta("Changed"):
 		%"Save Window".show_request()
 		var response = await Signal(%"Save Window", "save_response")
+		if response == null:
+			return
 		if response:
-			if not save_file(clickedButton):
-				return
+			save_file(clickedButton)
 	
 	if clickedButton == activeButton:
 		if fileButtons.size() > 1:
@@ -242,11 +241,6 @@ func _close_file(clickedButton):
 	activeButton.set_meta("Changed", false)
 
 func close():
-	var _save_file = FileAccess.open("user://fileBar.txt", FileAccess.WRITE)
-	for button in fileButtons:
-		var path = button.get_meta("FilePath")
-		if path != "":
-			_save_file.store_line(path)
 	%Emulator.update_settings()
 	%Emulator.is_running = false
 	if %Emulator.thread.is_alive():

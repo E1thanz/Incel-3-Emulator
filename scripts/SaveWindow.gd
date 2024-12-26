@@ -8,7 +8,7 @@ signal save_response(response)
 
 func _close_button():
 	visible = false
-	save_response.emit(false)
+	save_response.emit(null)
 	
 func show_request():
 	anchors_preset = Control.PRESET_CENTER

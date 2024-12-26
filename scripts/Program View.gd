@@ -7,11 +7,11 @@ const REGISTERS = {"r0":"000", "r1":"001", "r2":"010", "r3":"011", "r4":"100", "
 const CONDITIONS = {"novf": "000", "ovf": "001", "nc": "010", "c": "011", "nmsb": "100", "msb": "101", "nz": "110", "z": "111",
 					"!overflow": "000", "overflow": "001", "!carry": "010", "carry": "011", "!msb": "100", "!zero": "110", "zero": "111",
 					"!=": "110", "=": "111", "<": "010", ">=": "011", ">=0": "100", "<0": "101",
-					"!ovf": "000", "!c": "010", "!z": "110", "eq": "111", "neq": "110"}
+					"!ovf": "000", "!c": "010", "!z": "110", "eq": "111", "neq": "110", "!eq": "110"}
 					
 const POSSIBLE_REGISTERS = ["r0", "r1", "r2", "r3", "r4", "r5", "r6", "r7"]
 const POSSIBLE_CONDITIONS = ["novf", "ovf", "nc", "c", "nmsb", "msb", "nz", "z", "!overflow", "overflow", "!carry", "carry", "!msb", "!zero", "zero",
-							"!=", "=", "<", ">=", ">=0", "<0", "!ovf", "!c", "!z", "eq", "neq"]
+							"!=", "=", "<", ">=", ">=0", "<0", "!ovf", "!c", "!z", "eq", "neq", "!eq"]
 
 var definitions = {}
 var labels = {}
@@ -35,7 +35,7 @@ func Parse_Literal(value: String, bits: int, line: int, instruction: String, par
 			#return "%0*d" % [bits, binaryOutput]
 			return str(value.hex_to_int())
 		return "Error: hex form %s literal with non hex digits given on line %s for instruction %s" % [param_type, line, instruction]
-	if value.is_valid_int() and (value.length() == 1 or value[1] != "+"):
+	if value.is_valid_int() and (value.length() != 1 or value[0] != "+"):
 		var int_value = value.to_int()
 		var binaryOutput = ""
 		if int_value < 0:

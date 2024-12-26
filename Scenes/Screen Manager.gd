@@ -22,7 +22,7 @@ func sync(self_node: int) -> void:
 	selected = self_node
 	size.x = 24 + 28 * selected
 	position.x = 605 - 28 * selected
-	%Screen.update_screen()
+	%Screen.create_screen()
 
 func _on_check_box_toggled(self_node: int) -> void:
 	check_list[self_node].disabled = true

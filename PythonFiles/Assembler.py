@@ -100,9 +100,16 @@ class PARAMETERS:
 
     @staticmethod
     def Single(value: str, line: int, instruction: str) -> str:
-        if not BIN.is_binary(value, 1)[0]:
-            exit(f"Error: invalid single on line {line} for instruction {instruction}, a single is either a 0 or a 1")
-        return value
+        if value in DEFINITIONS:
+            if DEFINITIONS[value] in ["0", "0b0", "0x0"]:
+                return "0"
+            elif DEFINITIONS[value] in ["1", "0b1", "0x1"]:
+                return "1"
+        if value in ["0", "0b0", "0x0"]:
+            return "0"
+        elif value in ["1", "0b1", "0x1"]:
+            return "1"
+        exit(f"Error: invalid single on line {line} for instruction {instruction}, a single is either a 0 or a 1")
 
     @staticmethod
     def Label(value: str, line: int, instruction: str) -> str:

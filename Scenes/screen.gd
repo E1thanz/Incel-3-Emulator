@@ -40,7 +40,7 @@ func test_screen():
 		for j in screen_x:
 			if fmod(i + j, 2) == 0:
 				set_pixel(j, i, true)
-	
+
 func create_screen():
 	if screen_x < 1 or 128 < screen_x:
 		return
@@ -50,14 +50,16 @@ func create_screen():
 	
 	grid.columns = screen_x
 	changes.clear()
+	buffer.clear()
 	
 	for child in grid.get_children():
 		grid.remove_child(child)
 		child.queue_free()
 	
 	for y in screen_y:
+		buffer.append([])
 		for x in screen_x:
-			buffer[y][x] = false
+			buffer[-1].append(false)
 			var pixel = ColorRect.new()
 			pixel.color = Color.hex(0x000000ff)
 			pixel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
