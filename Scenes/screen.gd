@@ -18,10 +18,10 @@ func set_y(new_y: int):
 	screen_y = new_y
 
 func clear_buffer():
+	changes.clear()
 	for y in screen_y:
 		for x in screen_x:
-			buffer[y][x] = false
-	changes.clear()
+			add_change(x, y, false)
 	
 func update_screen():
 	for change in changes:
